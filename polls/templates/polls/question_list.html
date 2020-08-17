@@ -1,0 +1,6 @@
+{% extends 'polls/_base.html' %}
+{% block content %}
+{% for question in question_list %}
+<p class="display-4">{{ question.question_text }}</p>
+{% endfor %}
+{% endblock content %}
