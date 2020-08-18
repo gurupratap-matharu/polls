@@ -29,7 +29,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(os.environ.get('DEBUG', default=0))
 
-ALLOWED_HOSTS = ['testserver', 'localhost', '127.0.0.1', '0.0.0.0']
+ALLOWED_HOSTS = ['stormy-falls-26925.herokuapp.com', 'testserver', 'localhost', '127.0.0.1', '0.0.0.0']
 
 
 # Application definition
