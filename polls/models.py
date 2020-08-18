@@ -1,6 +1,7 @@
 import datetime
 
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 
 
@@ -13,6 +14,9 @@ class Question(models.Model):
 
     def was_published_recently(self):
         return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
+
+    def get_absolute_url(self):
+        return reverse('polls:question_detail', args=[str(self.id)])
 
 
 class Choice(models.Model):
