@@ -1,4 +1,12 @@
 {% extends 'polls/_base.html' %}
 {% block content %}
-<p class="display-1">{{ question }}</p>
+<p class="display-4">{{ question }}</p>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="" method="post"></form>
+{% for choice in question.choice_set.all %}
+<p class="display-4">{{ choice.choice_text }}</p>
+{% endfor %}
+
 {% endblock content %}
