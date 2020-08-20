@@ -1,4 +1,4 @@
-{% extends 'polls/_base.html' %}
+{% extends '_base.html' %}
 {% block content %}
 {% for question in question_list %}
 <a href="{{ question.get_absolute_url }}">
