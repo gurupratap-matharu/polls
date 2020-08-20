@@ -53,7 +53,7 @@ INSTALLED_APPS = [
 
     # Local
     # 'users.apps.UsersConfig',
-    # 'pages.apps.PagesConfig',
+    'pages.apps.PagesConfig',
     'polls.apps.PollsConfig',
 ]
 
@@ -202,12 +202,18 @@ LOGGING = {
             'formatter': 'simple'
         },
     },
-    'root': {
-        'handlers': ['console'],
-        'level': 'INFO',
-    },
     'loggers': {
         'main': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'polls': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'pages': {
             'handlers': ['console'],
             'level': 'DEBUG',
             'propagate': True,
