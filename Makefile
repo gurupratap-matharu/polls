@@ -9,3 +9,7 @@ logs:
 	docker-compose logs -f web
 ps:
 	docker-compose ps
+makemigrations:
+	docker-compose exec web python manage.py makemigrations
+migrate:
+	docker-compose exec web python manage.py migrate
