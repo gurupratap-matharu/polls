@@ -21,4 +21,5 @@ urlpatterns = [
     path('dj-admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
     path('polls/', include('polls.urls')),
+    path('classroom/', include('classroom.urls')),
 ]
