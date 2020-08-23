@@ -1,8 +1,10 @@
 {% extends '_base.html' %}
 {% block content %}
-{% for question in question_list %}
-<a href="{{ question.get_absolute_url }}">
-    <p class="display-4">{{ question.question_text }}</p>
-</a>
-{% endfor %}
+<div class="container">
+    {% for question in question_list %}
+    <a href="{{ question.get_absolute_url }}">
+        <p class="display-4">{{ question.question_text }}</p>
+    </a>
+    {% endfor %}
+</div>
 {% endblock content %}
