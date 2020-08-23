@@ -24,10 +24,11 @@ class Question(models.Model):
 
 class Choice(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
     choice_text = models.CharField(max_length=200)
     votes = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.choice_text
