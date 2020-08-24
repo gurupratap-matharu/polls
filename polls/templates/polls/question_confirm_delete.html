@@ -4,12 +4,20 @@
 
 {% block content %}
 <div class="container w-50">
-    <p class="display-4">Delete</p>
-    <p>{{ object }}</p>
+    <a href="{{ question.get_absolute_url }}" class="text-dark text-decoration-none">
+        <div class="d-flex">
+            <i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i>
+            <p class="lead ml-2">Back</p>
+        </div>
+    </a>
+    <hr class="p-2">
+
+    <p class="lead text-danger"><strong>Delete?</strong></p>
+    <p class="lead">{{ object }}</p>
     <form action="" method="post">
         {% csrf_token %}
         {{ form|crispy }}
-        <button type="submit" class="btn btn-light btn-block btn-outline-dark">Confirm</button>
+        <button type="submit" class="btn btn-light btn-block btn-outline-danger">Confirm</button>
     </form>
 </div>
 {% endblock content %}

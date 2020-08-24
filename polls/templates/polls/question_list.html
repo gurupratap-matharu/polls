@@ -1,8 +1,16 @@
 {% extends '_base.html' %}
 {% block content %}
 <div class="container">
-    <a href="{% url 'polls:question_create' %}"><button class="btn btn-light btn-block btn-outline-dark" button"
-            aria-pressed="false" autocomplete="off" mb-3">Add</button></a>
+    <a href="{% url 'pages:home' %}" class="text-dark text-decoration-none">
+        <div class="d-flex">
+            <i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i>
+            <p class="lead ml-2">Home</p>
+        </div>
+    </a>
+    <hr class="p-3">
+
+    <a href="{% url 'polls:question_create' %}"><button class="btn btn-light btn-block btn-outline-dark mb-5"
+            aria-pressed="false" autocomplete="off">Add</button></a>
     {% for question in question_list %}
     <a href="{{ question.get_absolute_url }}" class="text-dark">
         <p class="lead">{{ question.question_text }}</p>
