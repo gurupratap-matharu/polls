@@ -21,6 +21,12 @@ class Question(models.Model):
     def get_absolute_url(self):
         return reverse('polls:question_detail', args=[str(self.id)])
 
+    def get_update_url(self):
+        return reverse('polls:question_update', args=[str(self.id)])
+
+    def get_delete_url(self):
+        return reverse('polls:question_delete', args=[str(self.id)])
+
 
 class Choice(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

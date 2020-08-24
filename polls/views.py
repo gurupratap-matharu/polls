@@ -40,7 +40,7 @@ class QuestionUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 
 class QuestionDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Question
-    success_url = reverse_lazy('question_list')
+    success_url = reverse_lazy('polls:question_list')
     success_message = 'Question deleted successfully!'
 
 

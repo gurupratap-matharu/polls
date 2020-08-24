@@ -1,9 +1,11 @@
 {% extends '_base.html' %}
 {% block content %}
 <div class="container">
+    <a href="{% url 'polls:question_create' %}"><button class="btn btn-light btn-block btn-outline-dark" button"
+            aria-pressed="false" autocomplete="off" mb-3">Add</button></a>
     {% for question in question_list %}
-    <a href="{{ question.get_absolute_url }}">
-        <p class="display-4">{{ question.question_text }}</p>
+    <a href="{{ question.get_absolute_url }}" class="text-dark">
+        <p class="lead">{{ question.question_text }}</p>
     </a>
     {% endfor %}
 </div>
