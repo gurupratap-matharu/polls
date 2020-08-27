@@ -1,7 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
-from django.utils import timezone
 from django.views.generic import DetailView, ListView, TemplateView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
@@ -22,12 +21,11 @@ class QuestionDetailView(DetailView):
 
 class QuestionCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Question
-    fields = ['question_text']
+    fields = ['question_text', 'pub_date']
     success_message = "Question created successfully!"
 
     def form_valid(self, form):
-        form.instance.user = self.request.user
-        form.instance.pub_date = timezone.now()
+        form.instance.created_by = self.request.user
         return super().form_valid(form)
 
 
