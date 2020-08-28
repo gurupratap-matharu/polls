@@ -1,10 +1,5 @@
-from django.forms import ModelForm
+from django.forms import inlineformset_factory
 
-from polls.models import Question
+from polls.models import Choice, Question
 
-
-class QuestionForm(ModelForm):
-    model = Question
-
-
-class VoteForm()
+ChoiceFormSet = inlineformset_factory(Question, Choice, fields=('choice_text'))
