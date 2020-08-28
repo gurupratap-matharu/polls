@@ -14,10 +14,9 @@
                 class="fa fa-pencil fa-lg" aria-hidden="true"></i></span></a>
     <a href="{{ question.get_delete_url }}" class="text-dark"><span class="float-right ml-3"><i
                 class="fa fa-times-circle-o fa-lg" aria-hidden="true"></i></span></a>
-
-    <form action="" method="post"></form>
+    <hr class="mt-5">
     {% for choice in question.choice_set.all %}
-    <p class="display-4">{{ choice.choice_text }}</p>
+    <p class="lead">{{ choice.choice_text }}</p>
     {% endfor %}
 </div>
 
