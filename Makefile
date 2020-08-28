@@ -40,3 +40,6 @@ check-deploy:
 
 coverage:
 	docker-compose exec web coverage run --omit='*/venv/*' manage.py test
+
+coverage-report:
+	docker-compose exec web coverage report
