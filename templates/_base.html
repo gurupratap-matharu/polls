@@ -23,11 +23,13 @@
         {% block content %}
         {% endblock content %}
     </div>
-    <div class="fixed-bottom p-3">
-        <a href="{% url 'pages:feedback' %}" class="text-dark">
-            <i class="fa fa-question-circle-o fa-lg" aria-hidden="true"></i>
-        </a>
-    </div>
+    <a href="{% url 'pages:feedback' %}" class="text-dark">
+        <button type="submit" class="btn btn-light fixed-bottom p-3">
+            <i class="fa fa-question-circle-o fa-lg" aria-hidden="true">
+            </i>
+        </button>
+    </a>
+
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
