@@ -37,3 +37,6 @@ check:
 	docker-compose exec web python manage.py check
 check-deploy:
 	docker-compose exec web python manage.py check --deploy
+
+coverage:
+	docker-compose exec web coverage run --omit='*/venv/*' manage.py test
