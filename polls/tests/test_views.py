@@ -17,7 +17,8 @@ class QuestionListTests(TestCase):
         )
         self.question = Question.objects.create(
             question_text='When will I go to India?',
-            pub_date=timezone.now()
+            pub_date=timezone.now(),
+            created_by=self.user
         )
 
     def test_question_list_view_works_for_anonymous_user(self):
@@ -62,7 +63,8 @@ class QuestionDetailTests(TestCase):
 
         self.question = Question.objects.create(
             question_text='When will I go to India?',
-            pub_date=timezone.now()
+            pub_date=timezone.now(),
+            created_by=self.user
         )
 
     def test_question_detail_view_works_for_anonymous_user(self):
@@ -137,7 +139,8 @@ class QuestionUpdateTests(TestCase):
         )
         self.question = Question.objects.create(
             question_text='When will I go to India?',
-            pub_date=timezone.now()
+            pub_date=timezone.now(),
+            created_by=self.user
         )
 
     def test_question_update_view_redirects_for_anonymous_user(self):
@@ -175,7 +178,8 @@ class QuestionDeleteTests(TestCase):
         )
         self.question = Question.objects.create(
             question_text='When will I go to India?',
-            pub_date=timezone.now()
+            pub_date=timezone.now(),
+            created_by=self.user
         )
 
     def test_question_delete_redirects_for_anonymous_user(self):
