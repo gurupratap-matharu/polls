@@ -1,8 +1,8 @@
 from django.urls import path
 
-from classroom.views import ClassroomListView
+from classroom.views import ClassroomDetailView, ClassroomListView
 
-app_name = 'classroom'
 urlpatterns = [
     path('', ClassroomListView.as_view(), name='classroom_list'),
+    path('<uuid:pk>/', ClassroomDetailView.as_view(), name='classroom_detail'),
 ]
