@@ -3,7 +3,36 @@
 {% block title %}Classroom{% endblock title %}
 
 {% block content %}
-<div class="container">
-    <p class="display-4">Welcome to classroom!</p>
+<div class="mb-3">
+    <button type="submit" class="btn btn-light"><i class="fa fa-sticky-note-o fa-lg p-2" aria-hidden="true"></i>
+        <p class="text-primary d-inline">
+            To-do
+        </p>
+    </button>
+    <button type="submit" class="btn btn-light"><i class="fa fa-calendar fa-lg p-2" aria-hidden="true"></i>
+        <p class="text-primary d-inline">
+            Calendar
+        </p>
+    </button>
+</div>
+<div class="row">
+    {% for classroom in classroom_list %}
+    <div class="col-12 col-lg-6 col-xl-3">
+        <div class="card rounded shadow mb-3">
+            <h5 class="card-header">{{ classroom.name }}</h5>
+            <img src="" alt="" class="card-img-top">
+            <div class="card-body">
+                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional
+                    content. This content is a little bit longer.</p>
+            </div>
+            <div class="card-footer bg-white d-flex justify-content-end">
+                <button type="submit" class="btn btn-light btn-sm ml-2"><i class="fa fa-user-o"
+                        aria-hidden="true"></i></button>
+                <button type="submit" class="btn btn-light btn-sm ml-2"><i class="fa fa-folder-o"
+                        aria-hidden="true"></i></button>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
 </div>
 {% endblock content %}
