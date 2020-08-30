@@ -2,7 +2,17 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.utils import timezone
 
+from polls.factories import ChoiceFactory, QuestionFactory, UserFactory
 from polls.models import Choice, Question
+
+
+class ModelTests(TestCase):
+    def test_model_creation(self):
+        user = UserFactory()
+        question = QuestionFactory(created_by=user)
+        choice = ChoiceFactory(question=question)
+        self.assertEqual(question.created_by, user)
+        self.assertEqual(choice.question, question)
 
 
 class QuestionModelTests(TestCase):

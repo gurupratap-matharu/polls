@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 
+from classroom.factories import ClassroomFactory, UserFactory
 from classroom.models import Classroom
 
 
@@ -26,3 +27,16 @@ class ClassroomModelTest(TestCase):
         self.assertEqual(f'{self.classroom.room}', 'test_room')
         self.assertEqual(self.classroom.created_by, self.user)
         self.assertEqual(str(self.classroom), 'test_class')
+
+
+class ClassroomTests(TestCase):
+    def test_classroom_model_creation(self):
+        user = UserFactory()
+        c1 = ClassroomFactory(name='Astrophysics', created_by=user)
+        c2 = ClassroomFactory(name='Gravitational Mechanics', created_by=user)
+
+        self.assertEqual(Classroom.objects.count(), 2)
+        self.assertEqual(c1.created_by, user)
+        self.assertEqual(c2.created_by, user)
+        self.assertEqual(c1.name, 'Astrophysics')
+        self.assertEqual(c2.name, 'Gravitational Mechanics')
