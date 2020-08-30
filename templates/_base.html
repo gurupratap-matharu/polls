@@ -17,7 +17,7 @@
 </head>
 
 <body>
-    {% include '_header.html' %}
+    {% block header %}{% include '_header.html' %}{% endblock header %}
     {% include '_toast.html' %}
     <div class="container-fluid">
         {% block content %}
