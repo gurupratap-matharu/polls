@@ -26,3 +26,6 @@ class Classroom(models.Model):
 
     def get_delete_url(self):
         return reverse('classroom_delete', args=[str(self.id)])
+
+    def can_edit(self, user):
+        return self.created_by == user
