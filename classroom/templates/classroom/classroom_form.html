@@ -14,7 +14,9 @@
     <form action="" method="post">
         {% csrf_token %}
         {{ form|crispy }}
-        <button type="submit" class="btn btn-light btn-block btn-outline-dark">Create</button>
+        <div class="mt-3 pt-3 d-flex justify-content-end">
+            <button type="submit" class="btn btn-outline-success btn-block">Create</button>
+        </div>
     </form>
 </div>
 {% endblock content %}
