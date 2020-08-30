@@ -5,7 +5,7 @@ from django.urls import resolve, reverse
 
 class CustomUserTests(TestCase):
     def test_create_user(self):
-        user = get_user_model().objects.test_create_user(
+        user = get_user_model().objects.create_user(
             username='testuser',
             email='testuser@email.com',
             password='testpass123'
@@ -18,7 +18,7 @@ class CustomUserTests(TestCase):
 
     def test_create_superuser(self):
 
-        user = get_user_model().objects.test_create_superuser(
+        user = get_user_model().objects.create_superuser(
             username='testuser',
             email='testuser@email.com',
             password='testpass123'
@@ -38,6 +38,7 @@ class SignupTests(TestCase):
 
         response = self.client.get(reverse('account_signup'))
         no_response = self.client.get('/signup/')
+
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'account/signup.html')
         self.assertContains(response, 'Sign Up')
@@ -45,9 +46,11 @@ class SignupTests(TestCase):
         self.assertEqual(no_response.status_code, 404)
 
     def test_signup_form(self):
-        _ = get_user_model().objects.create_user(
-            self.username, self.email
+        newuser = get_user_model().objects.create_user(
+            username='newuser',
+            email='newuser@email.com',
+            password='newuser123'
         )
         self.assertEqual(get_user_model().objects.all().count(), 1)
-        self.assertEqual(get_user_model().objects.all()[0].username, self.username)
-        self.assertEqual(get_user_model().objects.all()[0].email, self.email)
+        self.assertEqual(get_user_model().objects.all()[0].username, 'newuser')
+        self.assertEqual(get_user_model().objects.all()[0].email, 'newuser@email.com')
