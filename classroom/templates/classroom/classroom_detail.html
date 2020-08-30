@@ -11,12 +11,13 @@
         </div>
     </a>
     <hr class="p-3">
-
     <p class="lead">{{ classroom }}</p>
+    {% if can_edit %}
     <a href="{{ classroom.get_update_url }}" class="text-dark"><span class="float-right ml-3"><i
                 class="fa fa-pencil fa-lg" aria-hidden="true"></i></span></a>
     <a href="{{ classroom.get_delete_url }}" class="text-dark"><span class="float-right ml-3"><i
                 class="fa fa-times-circle-o fa-lg" aria-hidden="true"></i></span></a>
+    {% endif %}
     <hr class="mt-5">
 </div>
 
