@@ -40,3 +40,4 @@ class ClassroomUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 class ClassroomDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Classroom
     success_url = reverse_lazy('classroom_list')
+    success_message = "%(name)s successfully deleted!"
