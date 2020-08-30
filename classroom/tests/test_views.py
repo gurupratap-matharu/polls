@@ -72,3 +72,15 @@ class ClassroomDetailTests(TestCase):
     def test_classroom_list_resolves_classroomlistview(self):
         view = resolve(self.classroom.get_absolute_url())
         self.assertEqual(view.func.__name__, ClassroomDetailView.as_view().__name__)
+
+
+class ClassroomCreateTests(TestCase):
+    pass
+
+
+class ClassroomUpdateTests(TestCase):
+    pass
+
+
+class ClassroomDeleteTests(TestCase):
+    pass
