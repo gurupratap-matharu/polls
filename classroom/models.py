@@ -28,4 +28,10 @@ class Classroom(models.Model):
         return reverse('classroom_delete', args=[str(self.id)])
 
     def can_edit(self, user):
-        return self.created_by == user
+        return user.is_superuser or self.created_by == user
+
+    def can_update(self, user):
+        return user.is_superuser or self.created_by == user
+
+    def can_delete(self, user):
+        return user.is_superuser or self.created_by == user
