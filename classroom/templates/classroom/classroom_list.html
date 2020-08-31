@@ -28,10 +28,10 @@
                         <i class="fa fa-ellipsis-v fa-sm" aria-hidden="true"></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                        <button class="dropdown-item" type="button">Copy invite link</button>
-                        <button class="dropdown-item" type="button">Edit</button>
-                        <button class="dropdown-item" type="button">Archive</button>
-                        <button class="dropdown-item" type="button">Delete</button>
+                        <a class="dropdown-item" href="#" type="button">Copy invite link</a>
+                        <a class="dropdown-item" href="{{ classroom.get_update_url }}" type="button" href>Edit</a>
+                        <a class="dropdown-item" href="#" type="button">Archive</a>
+                        <a class="dropdown-item" href="{{ classroom.get_delete_url }}" type="button">Delete</a>
                     </div>
                 </div>
                 <img src="" alt="" class="card-img-top">
