@@ -18,37 +18,37 @@
 <div class="row">
     {% for classroom in classroom_list %}
     <div class="col-12 col-lg-6 col-xl-3">
-        <a href="{{ classroom.get_absolute_url }}" class="text-decoration-none text-dark">
-            <div class="card rounded-lg shadow mb-3">
-                <div class="card-header d-flex">
+        <div class="card rounded-lg shadow mb-3">
+            <div class="card-header d-flex">
+                <a href="{{ classroom.get_absolute_url }}" class="text-dark">
                     <h5 class="font-weight-light">{{ classroom.name }}</h5>
-                    <a class="ml-auto text-decoration-none text-dark" role="button" id="dropdownMenuLink"
-                        aria-haspopup="true" aria-expanded="false" data-toggle="dropdown"
-                        href="{{ classroom.get_absolute_url }}">
-                        <i class="fa fa-ellipsis-v fa-sm" aria-hidden="true"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                        <a class="dropdown-item" href="#" type="button">Copy invite link</a>
-                        <a class="dropdown-item" href="{{ classroom.get_update_url }}" type="button" href>Edit</a>
-                        <a class="dropdown-item" href="#" type="button">Archive</a>
-                        <a class="dropdown-item" href="{{ classroom.get_delete_url }}" type="button">Delete</a>
-                    </div>
-                </div>
-                <img src="" alt="" class="card-img-top">
-                <div class="card-body">
-                    <p class="card-text font-weight-light">
-                        This is a wider card with supporting text below as a natural
-                        lead-in to additional content. This content is a little bit longer.
-                    </p>
-                </div>
-                <div class="card-footer bg-white d-flex justify-content-end">
-                    <button type="submit" class="btn btn-light btn-sm ml-2"><i class="fa fa-user-o"
-                            aria-hidden="true"></i></button>
-                    <button type="submit" class="btn btn-light btn-sm ml-2"><i class="fa fa-folder-o"
-                            aria-hidden="true"></i></button>
+                </a>
+                <a class="ml-auto text-decoration-none text-dark" role="button" id="dropdownMenuLink"
+                    aria-haspopup="true" aria-expanded="false" data-toggle="dropdown"
+                    href="{{ classroom.get_absolute_url }}">
+                    <i class="fa fa-ellipsis-v fa-sm" aria-hidden="true"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                    <a class="dropdown-item" href="#" type="button">Copy invite link</a>
+                    <a class="dropdown-item" href="{{ classroom.get_update_url }}" type="button" href>Edit</a>
+                    <a class="dropdown-item" href="#" type="button">Archive</a>
+                    <a class="dropdown-item" href="{{ classroom.get_delete_url }}" type="button">Delete</a>
                 </div>
             </div>
-        </a>
+            <img src="" alt="" class="card-img-top">
+            <div class="card-body">
+                <p class="card-text font-weight-light">
+                    This is a wider card with supporting text below as a natural
+                    lead-in to additional content. This content is a little bit longer.
+                </p>
+            </div>
+            <div class="card-footer bg-white d-flex justify-content-end">
+                <button type="submit" class="btn btn-light btn-sm ml-2"><i class="fa fa-user-o"
+                        aria-hidden="true"></i></button>
+                <button type="submit" class="btn btn-light btn-sm ml-2"><i class="fa fa-folder-o"
+                        aria-hidden="true"></i></button>
+            </div>
+        </div>
     </div>
     {% endfor %}
 </div>
