@@ -19,8 +19,21 @@
     {% for classroom in classroom_list %}
     <div class="col-12 col-lg-6 col-xl-3">
         <a href="{{ classroom.get_absolute_url }}" class="text-decoration-none text-dark">
-            <div class="card rounded shadow mb-3">
-                <h5 class="card-header font-weight-light">{{ classroom.name }}</h5>
+            <div class="card rounded-lg shadow mb-3">
+                <div class="card-header d-flex">
+                    <h5 class="font-weight-light">{{ classroom.name }}</h5>
+                    <a class="ml-auto text-decoration-none text-dark" role="button" id="dropdownMenuLink"
+                        aria-haspopup="true" aria-expanded="false" data-toggle="dropdown"
+                        href="{{ classroom.get_absolute_url }}">
+                        <i class="fa fa-ellipsis-v fa-sm" aria-hidden="true"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                        <button class="dropdown-item" type="button">Copy invite link</button>
+                        <button class="dropdown-item" type="button">Edit</button>
+                        <button class="dropdown-item" type="button">Archive</button>
+                        <button class="dropdown-item" type="button">Delete</button>
+                    </div>
+                </div>
                 <img src="" alt="" class="card-img-top">
                 <div class="card-body">
                     <p class="card-text font-weight-light">
