@@ -11,9 +11,11 @@ class Classroom(models.Model):
     section = models.CharField(max_length=200, blank=True)
     subject = models.CharField(max_length=200, blank=True)
     room = models.CharField(max_length=200, blank=True)
+    is_active = models.BooleanField(default=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    students = models.ManyToManyField(get_user_model(), through='Enrollment', related_name='classes')
 
     def __str__(self):
         return self.name
@@ -35,3 +37,20 @@ class Classroom(models.Model):
 
     def can_delete(self, user):
         return user.is_superuser or self.created_by == user
+
+
+class Enrollment(models.Model):
+    student = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    classroom = models.ForeignKey(Classroom, on_delete=models.CASCADE)
+    date_joined = models.DateField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
+    marks = models.IntegerField()
+
+    def __str__(self):
+        return ", ".join(
+            [
+                self.classroom,
+                self.student,
+                self.date_joined
+            ]
+        )
