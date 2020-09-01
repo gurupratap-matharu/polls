@@ -44,7 +44,7 @@ class Enrollment(models.Model):
     classroom = models.ForeignKey(Classroom, on_delete=models.CASCADE)
     date_joined = models.DateField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
-    marks = models.IntegerField()
+    marks = models.IntegerField(default=0)
 
     def __str__(self):
         return ", ".join(
