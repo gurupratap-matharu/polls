@@ -1,7 +1,7 @@
 import factory
 from django.contrib.auth import get_user_model
 
-from classroom.models import Classroom
+from classroom.models import Classroom, Enrollment
 
 
 class UserFactory(factory.django.DjangoModelFactory):
@@ -22,3 +22,10 @@ class ClassroomFactory(factory.django.DjangoModelFactory):
     subject = factory.Faker('slug')
     room = factory.Faker('word')
     created_by = factory.SubFactory(UserFactory)
+
+
+class EnrollmentFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Enrollment
+    student = factory.SubFactory(UserFactory)
+    classroom = factory.SubFactory(ClassroomFactory)
