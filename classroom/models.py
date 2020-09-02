@@ -40,6 +40,7 @@ class Classroom(models.Model):
 
 
 class Enrollment(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     student = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     classroom = models.ForeignKey(Classroom, on_delete=models.CASCADE)
     date_joined = models.DateField(auto_now_add=True)
@@ -49,8 +50,7 @@ class Enrollment(models.Model):
     def __str__(self):
         return ", ".join(
             [
-                self.classroom,
-                self.student,
-                self.date_joined
+                self.classroom.name,
+                self.student.email,
             ]
         )
