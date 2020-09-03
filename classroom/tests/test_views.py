@@ -6,7 +6,7 @@ from classroom.factories import ClassroomFactory, UserFactory
 from classroom.models import Classroom
 from classroom.views import (ClassroomCreate, ClassroomDelete,
                              ClassroomDetailView, ClassroomListView,
-                             ClassroomUpdate)
+                             ClassroomUpdate, EnrollmentCreate)
 
 
 class ClassroomListTests(TestCase):
@@ -166,3 +166,32 @@ class ClassroomDeleteTests(TestCase):
     def test_classroom_delete_resolves_classroomdeleteview(self):
         view = resolve(self.classroom.get_delete_url())
         self.assertEqual(view.func.__name__, ClassroomDelete.as_view().__name__)
+
+
+class EnrollmentTests(TestCase):
+    def setUp(self):
+        self.user = UserFactory()
+        self.classroom = ClassroomFactory(created_by=self.user)
+
+    def test_enrollment_create_redirects_for_logged_out_user(self):
+        response = self.client.get(reverse('enroll'))
+        no_response = self.client.get('/enrollment/')
+
+        self.assertEqual(response.status_code, 302)
+        self.assertTemplateNotUsed(response, 'classroom/enrollment_form.html')
+        self.assertEqual(no_response.status_code, 404)
+
+    def test_enrollment_create_works_for_logged_in_user(self):
+        self.client.force_login(self.user)
+        response = self.client.get(reverse('enroll'))
+        no_response = self.client.get('/enrollment/')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'classroom/enrollment_form.html')
+        self.assertContains(response, 'Enroll')
+        self.assertNotContains(response, 'Hi I should not be on this page!')
+        self.assertEqual(no_response.status_code, 404)
+
+    def test_enrollment_create_resolves_enrollmentcreateview(self):
+        view = resolve(reverse('enroll'))
+        self.assertEqual(view.func.__name__, EnrollmentCreate.as_view().__name__)
