@@ -18,7 +18,7 @@
 
 <body>
     {% block header %}{% include '_header.html' %}{% endblock header %}
-    {% include '_toast.html' %}
+    {% include '_alert.html' %}
     <div class="container-fluid">
         {% block content %}
         {% endblock content %}
@@ -42,6 +42,7 @@
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
     <script>$('.toast').toast('show')</script>
+    {% block js %}{% endblock js %}
 </body>
 
 </html>
