@@ -38,6 +38,9 @@ class Classroom(models.Model):
     def can_delete(self, user):
         return user.is_superuser or self.created_by == user
 
+    def get_enrollment(self, user):
+        return self.enrollment_set.get(student=user)
+
 
 class Enrollment(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -54,3 +57,6 @@ class Enrollment(models.Model):
                 self.student.email,
             ]
         )
+
+    def get_delete_url(self):
+        return reverse('enroll_delete', args=[str(self.id)])
