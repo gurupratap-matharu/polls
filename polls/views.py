@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
@@ -42,6 +43,10 @@ class QuestionDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Question
     success_url = reverse_lazy('polls:question_list')
     success_message = 'Question deleted successfully!'
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, self.success_message)
+        return super(QuestionDelete, self).delete(request, *args, **kwargs)
 
 
 class VoteView(TemplateView):
