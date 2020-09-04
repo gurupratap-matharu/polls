@@ -59,7 +59,11 @@ class ClassroomUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 class ClassroomDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Classroom
     success_url = reverse_lazy('classroom_list')
-    success_message = "%(name)s successfully deleted!"
+    success_message = "Classroom successfully deleted!"
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, self.success_message)
+        return super(ClassroomDelete, self).delete(request, *args, **kwargs)
 
 
 class EnrollmentCreate(LoginRequiredMixin, SuccessMessageMixin, FormView):
@@ -90,3 +94,7 @@ class EnrollmentDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     template_name = 'classroom/enrollment_confirm_delete.html'
     success_url = reverse_lazy('classroom_list')
     success_message = "You have enrolled successfully!"
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, self.success_message)
+        return super(EnrollmentDelete, self).delete(request, *args, **kwargs)
