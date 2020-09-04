@@ -23,7 +23,7 @@ class ClassroomListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return self.model.objects.filter(
             Q(students=self.request.user) | Q(created_by=self.request.user)
-        )
+        ).distinct()
 
 
 class ClassroomDetailView(LoginRequiredMixin, DetailView):
