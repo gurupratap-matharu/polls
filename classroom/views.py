@@ -1,5 +1,6 @@
 import logging
 
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import redirect
@@ -69,9 +70,9 @@ class EnrollmentCreate(LoginRequiredMixin, SuccessMessageMixin, FormView):
         enrollment, created = Enrollment.objects.get_or_create(student=student, classroom=classroom)
 
         if not created:
-            logger.critical('Student already enrolled. redirecting...')
-            self.success_message = 'You are already enrolled!'
-            redirect(reverse_lazy('classroom_list'))
+            logger.info('%s already enrolled in %s! redirecting...', student, classroom.name)
+            messages.info(self.request, 'You are already enrolled in {}!'.format(classroom))
+            return redirect(reverse_lazy('classroom_list'))
 
         logger.info('Enrolled in %s', enrollment)
         form.send_mail(student=student, classroom=classroom)
