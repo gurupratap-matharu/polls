@@ -198,6 +198,21 @@ class EnrollmentCreateTests(TestCase):
         view = resolve(reverse('enroll'))
         self.assertEqual(view.func.__name__, EnrollmentCreate.as_view().__name__)
 
+    def test_code_for_non_existing_class_doesnt_not_create_enrollment(self):
+        pass
+
+    def test_valid_code_for_existing_class_creates_enrollment(self):
+        pass
+
+    def test_valid_code_for_existing_enrollment_does_not_create_new_enrollment(self):
+        pass
+
+    def test_valid_code_for_existing_enrollment_redirects_with_proper_message(self):
+        pass
+
+    def test_invalid_class_code_throws_an_error(self):
+        pass
+
 
 class EnrollmentDeleteTests(TestCase):
     def setUp(self):
