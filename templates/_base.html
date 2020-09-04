@@ -18,8 +18,8 @@
 
 <body>
     {% block header %}{% include '_header.html' %}{% endblock header %}
-    {% include '_alert.html' %}
     <div class="container-fluid">
+        {% include '_alert.html' %}
         {% block content %}
         {% endblock content %}
     </div>
