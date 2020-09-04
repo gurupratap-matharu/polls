@@ -171,7 +171,7 @@ STATICFILES_FINDERS = [
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-LOGIN_REDIRECT_URL = 'pages:home'
+LOGIN_REDIRECT_URL = 'classroom_list'
 ACCOUNT_LOGOUT_REDIRECT = 'pages:home'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
