@@ -13,7 +13,8 @@
     <hr class="p-2">
 
     <p class="lead text-danger"><strong>Delete?</strong></p>
-    <p class="lead">{{ object }}</p>
+    <p class="lead">Are you sure that you ({{ object.student.email }}) wish to unenroll from the classroom
+        <strong>{{ object.classroom }}</strong>?</p>
     <form action="" method="post">
         {% csrf_token %}
         {{ form|crispy }}
