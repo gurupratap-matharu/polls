@@ -3,6 +3,7 @@ import logging
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.db.models import Q
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, FormView, ListView
@@ -18,6 +19,11 @@ class ClassroomListView(LoginRequiredMixin, ListView):
     model = Classroom
     context_object_name = 'classroom_list'
     template_name = 'classroom/classroom_list.html'
+
+    def get_queryset(self):
+        return self.model.objects.filter(
+            Q(students=self.request.user) | Q(created_by=self.request.user)
+        )
 
 
 class ClassroomDetailView(LoginRequiredMixin, DetailView):
