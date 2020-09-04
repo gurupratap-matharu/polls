@@ -9,7 +9,7 @@
     </a>
     <hr class="p-3">
 
-    <a href="{% url 'polls:question_create' %}"><button class="btn btn-light btn-block btn-outline-dark mb-5"
+    <a href="{% url 'polls:question_create' %}"><button class="btn btn-light btn-block btn-outline-success mb-5"
             aria-pressed="false" autocomplete="off">Add</button></a>
     {% for question in question_list %}
     <a href="{{ question.get_absolute_url }}" class="text-dark">
