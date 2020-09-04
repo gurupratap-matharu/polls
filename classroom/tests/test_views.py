@@ -2,11 +2,13 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import resolve, reverse
 
-from classroom.factories import ClassroomFactory, UserFactory
-from classroom.models import Classroom
+from classroom.factories import (ClassroomFactory, EnrollmentFactory,
+                                 UserFactory)
+from classroom.models import Classroom, Enrollment
 from classroom.views import (ClassroomCreate, ClassroomDelete,
                              ClassroomDetailView, ClassroomListView,
-                             ClassroomUpdate, EnrollmentCreate)
+                             ClassroomUpdate, EnrollmentCreate,
+                             EnrollmentDelete)
 
 
 class ClassroomListTests(TestCase):
@@ -168,7 +170,7 @@ class ClassroomDeleteTests(TestCase):
         self.assertEqual(view.func.__name__, ClassroomDelete.as_view().__name__)
 
 
-class EnrollmentTests(TestCase):
+class EnrollmentCreateTests(TestCase):
     def setUp(self):
         self.user = UserFactory()
         self.classroom = ClassroomFactory(created_by=self.user)
@@ -195,3 +197,34 @@ class EnrollmentTests(TestCase):
     def test_enrollment_create_resolves_enrollmentcreateview(self):
         view = resolve(reverse('enroll'))
         self.assertEqual(view.func.__name__, EnrollmentCreate.as_view().__name__)
+
+
+class EnrollmentDeleteTests(TestCase):
+    def setUp(self):
+        self.user = UserFactory()
+        self.classroom = ClassroomFactory(created_by=self.user)
+        self.enrollment = EnrollmentFactory(student=self.user,
+                                            classroom=self.classroom)
+
+    def test_enrollment_delete_redirects_for_logged_out_user(self):
+        response = self.client.get(self.enrollment.get_delete_url())
+        no_response = self.client.get('/enroll/1234/delete/')
+
+        self.assertEqual(response.status_code, 302)
+        self.assertTemplateNotUsed(response, 'classroom/enrollment_confirm_delete.html')
+        self.assertEqual(no_response.status_code, 404)
+
+    def test_enrollment_delete_view_works_for_logged_in_user(self):
+        self.client.force_login(self.user)
+        response = self.client.get(self.enrollment.get_delete_url())
+        no_response = self.client.get('/enroll/1234/delete/')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'classroom/enrollment_confirm_delete.html')
+        self.assertContains(response, 'Delete')
+        self.assertNotContains(response, 'Hi I should not be on this page!')
+        self.assertEqual(no_response.status_code, 404)
+
+    def test_enrollment_delete_resolves_enrollmentdeleteview(self):
+        view = resolve(self.enrollment.get_delete_url())
+        self.assertEqual(view.func.__name__, EnrollmentDelete.as_view().__name__)
