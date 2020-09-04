@@ -77,3 +77,10 @@ class EnrollmentCreate(LoginRequiredMixin, SuccessMessageMixin, FormView):
         logger.info('Enrolled in %s', enrollment)
         form.send_mail(student=student, classroom=classroom)
         return super().form_valid(form)
+
+
+class EnrollmentDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+    model = Enrollment
+    template_name = 'classroom/enrollment_confirm_delete.html'
+    success_url = reverse_lazy('classroom_list')
+    success_message = "You have enrolled successfully!"
