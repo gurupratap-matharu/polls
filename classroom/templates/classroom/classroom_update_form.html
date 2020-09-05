@@ -1,7 +1,7 @@
 {% extends 'classroom/_classroom_base.html' %}
 {% load crispy_forms_tags %}
 {% block title %}Update{% endblock title %}
-
+{% block appname %}{{ classroom.name|title }}{% endblock appname %}
 {% block content %}
 <div class="container">
     <a href="{{ classroom.get_absolute_url }}" class="text-dark text-decoration-none">
