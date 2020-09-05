@@ -1,7 +1,7 @@
-{% extends 'classroom/_classroom_base.html' %}
+{% extends '_base.html' %}
 
 {% block title %}Classroom{% endblock title %}
-
+{% block appname %}Classroom{% endblock appname %}
 {% block content %}
 <div class="mb-3">
     <button type="submit" class="btn btn-light"><i class="fa fa-sticky-note-o fa-lg p-2" aria-hidden="true"></i>
@@ -29,7 +29,7 @@
                     <i class="fa fa-ellipsis-v fa-sm" aria-hidden="true"></i>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                    <a class="dropdown-item" href="" type="button">Copy invite link</a>
+                    <a class="dropdown-item" href="" type="button">Get class code</a>
                     <a class="dropdown-item" href="" type="button">Un Enroll</a>
                 </div>
             </div>
