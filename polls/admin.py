@@ -13,6 +13,7 @@ class QuestionAdmin(admin.ModelAdmin):
     list_filter = ('pub_date',)
     search_fields = ('question_text',)
     model = Question
+    readonly_fields = ('created_by',)
 
 
 admin.site.register(Question, QuestionAdmin)
