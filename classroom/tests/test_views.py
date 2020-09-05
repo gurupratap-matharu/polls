@@ -1,5 +1,8 @@
+import uuid
+
 from django.contrib.auth import get_user_model
-from django.test import TestCase
+from django.contrib.messages.storage.fallback import FallbackStorage
+from django.test import RequestFactory, TestCase
 from django.urls import resolve, reverse
 
 from classroom.factories import (ClassroomFactory, EnrollmentFactory,
@@ -172,6 +175,7 @@ class ClassroomDeleteTests(TestCase):
 
 class EnrollmentCreateTests(TestCase):
     def setUp(self):
+        self.factory = RequestFactory()
         self.user = UserFactory()
         self.classroom = ClassroomFactory(created_by=self.user)
 
@@ -198,14 +202,57 @@ class EnrollmentCreateTests(TestCase):
         view = resolve(reverse('enroll'))
         self.assertEqual(view.func.__name__, EnrollmentCreate.as_view().__name__)
 
-    def test_code_for_non_existing_class_doesnt_not_create_enrollment(self):
-        pass
+    def test_code_for_non_existing_class_does_not_not_create_enrollment(self):
+        code = uuid.uuid4()
+        self.client.force_login(self.user)
+        response = self.client.post(reverse('enroll'), data={'code': code})
+        no_response = self.client.post('/enrollment/')
+
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(Enrollment.objects.count(), 0)
+        self.assertTemplateUsed(response, '404.html')
+        self.assertEqual(no_response.status_code, 404)
 
     def test_valid_code_for_existing_class_creates_enrollment(self):
-        pass
+        code = str(self.classroom.id)
+
+        request = self.factory.post(reverse('enroll'), data={'code': code})
+        setattr(request, 'session', 'session')
+        messages = FallbackStorage(request)
+        setattr(request, '_messages', messages)
+        request.user = self.user
+
+        response = EnrollmentCreate.as_view()(request)
+        # no_response = self.client.post('/enrollment/')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'classroom/enrollment_form.html')
+        self.assertContains(response, 'Enroll')
+        self.assertNotContains(response, 'Hi I should not be on this page!')
+        # self.assertEqual(no_response.status_code, 404)
+
+        enrollment = Enrollment.objects.all()[0]
+
+        self.assertEqual(Enrollment.objects.count(), 1)
+        self.assertEqual(enrollment.student, self.user)
+        self.assertEqual(enrollment.classroom, self.classroom)
 
     def test_valid_code_for_existing_enrollment_does_not_create_new_enrollment(self):
-        pass
+        code = str(self.classroom.id)
+        enrollment = EnrollmentFactory(student=self.user, classroom=self.classroom)
+
+        request = self.factory.post(reverse('enroll'), data={'code': code})
+        setattr(request, 'session', 'session')
+        messages = FallbackStorage(request)
+        setattr(request, '_messages', messages)
+        request.user = self.user
+
+        response = EnrollmentCreate.as_view()(request)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertContains(response, 'Enroll')
+        self.assertNotContains(response, 'Hi I should not be on this page!')
+        self.assertEqual(Enrollment.objects.count(), 1)
 
     def test_valid_code_for_existing_enrollment_redirects_with_proper_message(self):
         pass
