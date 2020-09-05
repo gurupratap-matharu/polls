@@ -14,9 +14,24 @@
                 <i class="fa fa-clipboard fa-lg" aria-hidden="true"></i>
             </a>
             {% if user.is_authenticated %}
-            <a class="p-2 text-dark text-decoration-none" href="{% url 'account_logout' %}">
-                <i class="fa fa-sign-out fa-lg" aria-hidden="true"></i>
-            </a>
+            <div class="btn-group">
+                <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
+                    <i class="fa fa-user-circle-o fa-lg" aria-hidden="true"></i>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right pt-4 px-2">
+                    <button class="dropdown-item text-center text-capitalize"
+                        type="button"><strong>{{ user.get_full_name }}</strong></button>
+                    <button class="dropdown-item font-weight-light" type="button">{{ user.email }}</button>
+                    <div class="dropdown-divider"></div>
+                    <button class="dropdown-item text-center p-3" type="button">
+                        <a href="{% url 'account_logout' %}" class="text-decoration-none text-dark">
+                            <i class="fa fa-sign-out fa-lg" aria-hidden="true"></i>
+                            Logout
+                        </a>
+                    </button>
+                </div>
+            </div>
             {% else %}
             <a class="p-2 text-dark text-decoration-none" href="{% url 'account_login' %}">
                 <i class="fa fa-sign-in fa-lg" aria-hidden="true"></i>
