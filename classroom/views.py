@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Q
-from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, FormView, ListView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
@@ -75,7 +75,7 @@ class EnrollmentCreate(LoginRequiredMixin, SuccessMessageMixin, FormView):
     def form_valid(self, form):
         code = self.request.POST['code']
         student = self.request.user
-        classroom = Classroom.objects.get(id=code)
+        classroom = get_object_or_404(Classroom, id=code)
 
         enrollment, created = Enrollment.objects.get_or_create(student=student, classroom=classroom)
 
