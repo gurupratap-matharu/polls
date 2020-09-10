@@ -26,6 +26,9 @@
                 {% block appname %}Polls{% endblock appname %}
             </a>
             <nav class="my-2 my-md-0 mr-md-3">
+                <a class="p-2 text-dark text-decoration-none" href="{% url 'classroom_create' %}">
+                    <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                </a>
                 <a class="p-2 text-dark text-decoration-none" href="{% url 'polls:question_list' %}">
                     <i class="fa fa-user-secret fa-lg" aria-hidden="true"></i>
                 </a>
