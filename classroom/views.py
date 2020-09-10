@@ -93,7 +93,7 @@ class EnrollmentDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Enrollment
     template_name = 'classroom/enrollment_confirm_delete.html'
     success_url = reverse_lazy('classroom_list')
-    success_message = "You have enrolled successfully!"
+    success_message = "You have unenrolled successfully!"
 
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, self.success_message)
