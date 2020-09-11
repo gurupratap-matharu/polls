@@ -1,7 +1,7 @@
 import factory
 from django.contrib.auth import get_user_model
 
-from classroom.models import Classroom, Enrollment
+from classroom.models import Classroom, Enrollment, Post
 
 
 class UserFactory(factory.django.DjangoModelFactory):
@@ -28,4 +28,15 @@ class EnrollmentFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Enrollment
     student = factory.SubFactory(UserFactory)
+    classroom = factory.SubFactory(ClassroomFactory)
+
+
+class PostFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Post
+    title = factory.Faker('sentence')
+    content = factory.Faker('text')
+    created_on = factory.Faker('date_time_this_decade')
+
+    author = factory.SubFactory(UserFactory)
     classroom = factory.SubFactory(ClassroomFactory)
