@@ -13,11 +13,12 @@
     {% for post in classroom.posts.all %}
     <div class="card p-2 mt-3 rounded-lg">
         <div class="card-header border-bottom-0 bg-white">
-            <div>
-                {{ post.title }}
-            </div>
-            <small>{{ post.author }},</small>
-            <small>{{ post.created_on|date:"j M" }}</small>
+            <div>{{ post.title }}</div>
+            <small class="text-muted">
+                {{ post.author }},
+                {{ post.created_on|date:"j M" }}
+                (Edited {{ post.updated_on.time }})
+            </small>
         </div>
         <div class="card-body">
             {{ post.content }}
