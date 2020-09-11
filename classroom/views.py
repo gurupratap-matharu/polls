@@ -4,12 +4,14 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Q
+from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, FormView, ListView
-from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from django.views.generic.edit import (CreateView, DeleteView, FormMixin,
+                                       UpdateView)
 
-from classroom.forms import EnrollmentForm
+from classroom.forms import EnrollmentForm, PostForm
 from classroom.models import Classroom, Enrollment
 
 logger = logging.getLogger(__name__)
@@ -26,10 +28,31 @@ class ClassroomListView(LoginRequiredMixin, ListView):
         ).distinct()
 
 
-class ClassroomDetailView(LoginRequiredMixin, DetailView):
+class ClassroomDetailView(LoginRequiredMixin, FormMixin, DetailView):
     model = Classroom
     context_object_name = 'classroom'
     template_name = 'classroom/classroom_detail.html'
+    form_class = PostForm
+
+    def get_success_url(self):
+        return self.get_object().get_absolute_url()
+
+    def post(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return HttpResponseForbidden()
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    def form_valid(self, form):
+        form.instance.classroom = self.get_object()
+        form.instance.author = self.request.user
+        form.save()
+        logger.info('saved post with form...%s', form)
+        return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
