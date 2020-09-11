@@ -32,6 +32,7 @@ class ClassroomDetailView(LoginRequiredMixin, FormMixin, DetailView):
     model = Classroom
     context_object_name = 'classroom'
     template_name = 'classroom/classroom_detail.html'
+    success_message = "Post successfully created!"
     form_class = PostForm
 
     def get_success_url(self):
@@ -40,7 +41,7 @@ class ClassroomDetailView(LoginRequiredMixin, FormMixin, DetailView):
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return HttpResponseForbidden()
-        self.object = self.get_object()
+
         form = self.get_form()
         if form.is_valid():
             return self.form_valid(form)
@@ -51,6 +52,7 @@ class ClassroomDetailView(LoginRequiredMixin, FormMixin, DetailView):
         form.instance.classroom = self.get_object()
         form.instance.author = self.request.user
         form.save()
+        messages.success(self.request, self.success_message)
         logger.info('saved post with form...%s', form)
         return super().form_valid(form)
 
