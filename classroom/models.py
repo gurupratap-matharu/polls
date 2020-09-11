@@ -60,3 +60,27 @@ class Enrollment(models.Model):
 
     def get_delete_url(self):
         return reverse('enroll_delete', args=[str(self.id)])
+
+
+STATUS = (
+    (0, "Draft"),
+    (1, "Publish")
+)
+
+
+class Post(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    title = models.CharField(max_length=200)
+    content = models.TextField()
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+    status = models.IntegerField(choices=STATUS, default=0)
+
+    author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='posts')
+    classroom = models.ForeignKey(Classroom, on_delete=models.CASCADE, related_name='posts')
+
+    class Meta:
+        ordering = ['-created_on']
+
+    def __str__(self):
+        return self.title
