@@ -80,7 +80,7 @@ class Post(models.Model):
     classroom = models.ForeignKey(Classroom, on_delete=models.CASCADE, related_name='posts')
 
     class Meta:
-        ordering = ['-created_on']
+        ordering = ['-updated_on']
 
     def __str__(self):
         return self.title
