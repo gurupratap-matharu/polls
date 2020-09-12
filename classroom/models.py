@@ -44,8 +44,8 @@ class Classroom(models.Model):
 
 class Enrollment(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    student = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
-    classroom = models.ForeignKey(Classroom, on_delete=models.CASCADE)
+    student = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='enrollments')
+    classroom = models.ForeignKey(Classroom, on_delete=models.CASCADE, related_name='enrollments')
     date_joined = models.DateField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
     marks = models.IntegerField(default=0)

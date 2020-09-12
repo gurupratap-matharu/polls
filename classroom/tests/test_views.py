@@ -7,6 +7,7 @@ from django.urls import resolve, reverse
 
 from classroom.factories import (ClassroomFactory, EnrollmentFactory,
                                  UserFactory)
+from classroom.forms import EnrollmentForm, PostForm
 from classroom.models import Classroom, Enrollment
 from classroom.views import (ClassroomCreate, ClassroomDelete,
                              ClassroomDetailView, ClassroomListView,
@@ -38,6 +39,7 @@ class ClassroomListTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'classroom/classroom_list.html')
         self.assertContains(response, 'Classroom')
+        self.assertEqual(list(response.context['object_list']), list(Classroom.objects.all()))
         self.assertNotContains(response, 'Hi I should not be on this page!')
         self.assertEqual(no_response.status_code, 404)
 
@@ -76,6 +78,12 @@ class ClassroomDetailTests(TestCase):
         self.assertContains(response, self.classroom.name)
         self.assertNotContains(response, 'Hi I should not be on this page!')
         self.assertEqual(no_response.status_code, 404)
+
+    def test_classroom_detail_contains_post_model_form(self):
+        self.client.force_login(self.user)
+        response = self.client.get(self.classroom.get_absolute_url())
+
+        self.assertIsInstance(response.context['form'], PostForm)
 
     def test_classroom_list_resolves_classroomlistview(self):
         view = resolve(self.classroom.get_absolute_url())
@@ -195,6 +203,7 @@ class EnrollmentCreateTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'classroom/enrollment_form.html')
         self.assertContains(response, 'Enroll')
+        self.assertIsInstance(response.context['form'], EnrollmentForm)
         self.assertNotContains(response, 'Hi I should not be on this page!')
         self.assertEqual(no_response.status_code, 404)
 
@@ -213,6 +222,18 @@ class EnrollmentCreateTests(TestCase):
         self.assertTemplateUsed(response, '404.html')
         self.assertEqual(no_response.status_code, 404)
 
+    def test_valid_enrollment_code_submission_works_correctly(self):
+        code = str(self.classroom.id)
+        response = self.client.post(reverse('enroll'), data={'code': code})
+
+        self.assertEqual(response.status_code, 302)
+        print(Enrollment.objects.all())
+        self.assertEqual(Enrollment.objects.count(), 1)
+
+        enrollment = Enrollment.objects.all()[0]
+        self.assertEqual(enrollment.classroom, self.classroom)
+        self.assertEqual(enrollment.student, self.user)
+
     def test_valid_code_for_existing_class_creates_enrollment(self):
         code = str(self.classroom.id)
 
@@ -223,13 +244,13 @@ class EnrollmentCreateTests(TestCase):
         request.user = self.user
 
         response = EnrollmentCreate.as_view()(request)
-        # no_response = self.client.post('/enrollment/')
+        no_response = self.client.post('/enrollment/')
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
         self.assertTemplateUsed(response, 'classroom/enrollment_form.html')
         self.assertContains(response, 'Enroll')
         self.assertNotContains(response, 'Hi I should not be on this page!')
-        # self.assertEqual(no_response.status_code, 404)
+        self.assertEqual(no_response.status_code, 404)
 
         enrollment = Enrollment.objects.all()[0]
 
@@ -255,9 +276,6 @@ class EnrollmentCreateTests(TestCase):
         self.assertEqual(Enrollment.objects.count(), 1)
 
     def test_valid_code_for_existing_enrollment_redirects_with_proper_message(self):
-        pass
-
-    def test_invalid_class_code_throws_an_error(self):
         pass
 
 
