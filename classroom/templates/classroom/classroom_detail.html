@@ -10,11 +10,11 @@
         <h1 class="display-4">{{ classroom }}</h1>
         <p class="lead">{{ classroom.subject }} | {{ classroom.section }} | {{ classroom.room }}</p>
     </div>
-    <div class="card p-2 mt-3 rounded-lg">
+    <div class="card p-4 mt-3 rounded-lg">
         <form action="" method="post">
             {% csrf_token %}
             {{ form|crispy }}
-            <button type="submit" class="btn btn-light btn-block">Save</button>
+            <button type="submit" class="btn btn-success btn-block">Save</button>
         </form>
     </div>
     {% for post in classroom.posts.all %}
