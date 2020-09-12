@@ -23,6 +23,7 @@ class ClassroomListView(LoginRequiredMixin, ListView):
     template_name = 'classroom/classroom_list.html'
 
     def get_queryset(self):
+        logger.info('Veer you are on the classroom page')
         return self.model.objects.filter(
             Q(students=self.request.user) | Q(created_by=self.request.user)
         ).distinct()
