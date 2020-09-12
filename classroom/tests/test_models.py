@@ -2,8 +2,8 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 
 from classroom.factories import (ClassroomFactory, EnrollmentFactory,
-                                 UserFactory)
-from classroom.models import Classroom, Enrollment
+                                 PostFactory, UserFactory)
+from classroom.models import Classroom, Enrollment, Post
 
 
 class ClassroomModelTest(TestCase):
@@ -148,3 +148,52 @@ class EnrollmentTests(TestCase):
 
         self.assertEqual(enrollment_2.student, user_2)
         self.assertEqual(enrollment_2.classroom, classroom_2)
+
+
+class PostTests(TestCase):
+    def setUp(self):
+        self.classroom_1 = ClassroomFactory()
+        self.classroom_2 = ClassroomFactory()
+
+        self.user_1 = UserFactory()
+        self.user_2 = UserFactory()
+
+        self.enroll_1 = EnrollmentFactory(student=self.user_1, classroom=self.classroom_1)
+        self.enroll_2 = EnrollmentFactory(student=self.user_2, classroom=self.classroom_2)
+
+        self.post_1 = PostFactory(author=self.user_1, classroom=self.classroom_1)
+        self.post_2 = PostFactory(author=self.user_2, classroom=self.classroom_2)
+
+    def test_post_model_creation(self):
+        self.assertEqual(Post.objects.count(), 2)
+        self.assertEqual(self.classroom_1.posts.count(), 1)
+        self.assertEqual(self.classroom_2.posts.count(), 1)
+        self.assertEqual(self.user_1.posts.count(), 1)
+        self.assertEqual(self.user_2.posts.count(), 1)
+
+        self.assertEqual(self.post_1.author, self.user_1)
+        self.assertEqual(self.post_2.author, self.user_2)
+
+        self.assertEqual(self.post_1.classroom, self.classroom_1)
+        self.assertEqual(self.post_2.classroom, self.classroom_2)
+
+    def test_most_recent_posts_are_seen_first(self):
+        pass
+
+    def test_only_user_who_created_a_post_can_edit_it(self):
+        pass
+
+    def test_only_user_who_created_a_post_can_delete_it(self):
+        pass
+
+    def test_super_user_can_edit_any_post(self):
+        pass
+
+    def test_super_user_can_delete_any_post(self):
+        pass
+
+    def test_student_who_is_not_enrolled_cannot_create_a_post(self):
+        pass
+
+    def test_edit_timestamp_reflects_latest_edit(self):
+        pass

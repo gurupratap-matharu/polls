@@ -239,7 +239,7 @@ class EnrollmentCreateTests(TestCase):
 
     def test_valid_code_for_existing_enrollment_does_not_create_new_enrollment(self):
         code = str(self.classroom.id)
-        enrollment = EnrollmentFactory(student=self.user, classroom=self.classroom)
+        _ = EnrollmentFactory(student=self.user, classroom=self.classroom)
 
         request = self.factory.post(reverse('enroll'), data={'code': code})
         setattr(request, 'session', 'session')
