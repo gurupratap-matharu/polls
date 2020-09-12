@@ -2,17 +2,14 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import resolve, reverse
 
+from pages.factories import UserFactory
 from pages.views import (AboutPageView, ContactPageView, FeedbackPageView,
                          HomePageView)
 
 
 class HomePageTests(TestCase):
     def setUp(self):
-        self.user = get_user_model().objects.create_user(
-            username='testuser',
-            email='testuser@email.com',
-            password='testpass123'
-        )
+        self.user = UserFactory()
 
     def test_home_page_works_for_logged_in_user(self):
         self.client.force_login(self.user)
@@ -42,11 +39,7 @@ class HomePageTests(TestCase):
 
 class AboutPageTests(TestCase):
     def setUp(self):
-        self.user = get_user_model().objects.create_user(
-            username='testuser',
-            email='testuser@email.com',
-            password='testpass123'
-        )
+        self.user = UserFactory()
 
     def test_about_page_works_for_logged_in_user(self):
         self.client.force_login(self.user)
@@ -76,11 +69,7 @@ class AboutPageTests(TestCase):
 
 class ContactPageTests(TestCase):
     def setUp(self):
-        self.user = get_user_model().objects.create_user(
-            username='testuser',
-            email='testuser@email.com',
-            password='testpass123'
-        )
+        self.user = UserFactory()
 
     def test_contact_page_works_for_logged_in_user(self):
         self.client.force_login(self.user)
@@ -110,11 +99,7 @@ class ContactPageTests(TestCase):
 
 class FeedbackPageTests(TestCase):
     def setUp(self):
-        self.user = get_user_model().objects.create_user(
-            username='testuser',
-            email='testuser@email.com',
-            password='testpass123'
-        )
+        self.user = UserFactory()
 
     def test_feedback_page_works_for_logged_in_user(self):
         self.client.force_login(self.user)
