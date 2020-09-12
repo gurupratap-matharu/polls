@@ -10,12 +10,28 @@
         <h1 class="display-4">{{ classroom }}</h1>
         <p class="lead">{{ classroom.subject }} | {{ classroom.section }} | {{ classroom.room }}</p>
     </div>
-    <div class="card p-4 mt-3 rounded-lg">
-        <form action="" method="post">
-            {% csrf_token %}
-            {{ form|crispy }}
-            <button type="submit" class="btn btn-success btn-block">Save</button>
-        </form>
+    <p>
+        <a href="#postForm" class="btn btn-light btn-block p-3 text-left" data-toggle="collapse" role="button"
+            aria-expanded="false" aria-controls="postForm">
+            <small>Share something with your class!</small>
+        </a>
+    </p>
+
+    <div class="collapse" id="postForm">
+        <div class="card p-4 mt-3 rounded-lg shadow">
+            <form action="" method="post">
+                {% csrf_token %}
+                {{ form|crispy }}
+
+                <div class="d-flex justify-content-end">
+                    <a href="#postForm" class="btn btn-light ml-2" data-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="postForm">
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn btn-success ml-2">Save</button>
+                </div>
+            </form>
+        </div>
     </div>
     {% for post in classroom.posts.all %}
     <div class="card p-2 mt-3 rounded-lg">
