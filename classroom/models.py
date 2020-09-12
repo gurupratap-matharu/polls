@@ -84,3 +84,9 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+    def can_update(self, user):
+        return user.is_superuser or self.author == user
+
+    def can_delete(self, user):
+        return user.is_superuser or self.author == user
