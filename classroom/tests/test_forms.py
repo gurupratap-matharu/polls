@@ -3,11 +3,9 @@ import uuid
 
 from django.core import mail
 from django.test import TestCase
-from django.urls import reverse
 
-from classroom.factories import (ClassroomFactory, EnrollmentFactory,
-                                 UserFactory)
-from classroom.forms import EnrollmentForm
+from classroom.factories import ClassroomFactory, UserFactory
+from classroom.forms import EnrollmentForm, PostForm
 
 
 class EnrollmentFormTests(TestCase):
@@ -29,4 +27,14 @@ class EnrollmentFormTests(TestCase):
 
     def test_invalid_enrollment_form_does_not_sends_email(self):
         form = EnrollmentForm({'code': '123456'})
+        self.assertFalse(form.is_valid())
+
+
+class PostFormTests(TestCase):
+    def test_valid_post_form_works(self):
+        form = PostForm({'title': 'A new beginning', 'content': 'We have to start over again'})
+        self.assertTrue(form.is_valid())
+
+    def test_invalid_post_form(self):
+        form = PostForm({'title': 'A new beginning'})
         self.assertFalse(form.is_valid())
