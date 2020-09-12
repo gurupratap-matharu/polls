@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
+from django.utils import timezone
 
 from classroom.factories import (ClassroomFactory, EnrollmentFactory,
                                  PostFactory, UserFactory)
@@ -152,11 +153,16 @@ class EnrollmentTests(TestCase):
 
 class PostTests(TestCase):
     def setUp(self):
-        self.classroom_1 = ClassroomFactory()
-        self.classroom_2 = ClassroomFactory()
-
+        self.super_user = get_user_model().objects.create_superuser(
+            username='superuser',
+            email='superuser@email.com',
+            password='superpass123'
+        )
         self.user_1 = UserFactory()
         self.user_2 = UserFactory()
+
+        self.classroom_1 = ClassroomFactory()
+        self.classroom_2 = ClassroomFactory()
 
         self.enroll_1 = EnrollmentFactory(student=self.user_1, classroom=self.classroom_1)
         self.enroll_2 = EnrollmentFactory(student=self.user_2, classroom=self.classroom_2)
@@ -166,8 +172,10 @@ class PostTests(TestCase):
 
     def test_post_model_creation(self):
         self.assertEqual(Post.objects.count(), 2)
+
         self.assertEqual(self.classroom_1.posts.count(), 1)
         self.assertEqual(self.classroom_2.posts.count(), 1)
+
         self.assertEqual(self.user_1.posts.count(), 1)
         self.assertEqual(self.user_2.posts.count(), 1)
 
@@ -178,22 +186,55 @@ class PostTests(TestCase):
         self.assertEqual(self.post_2.classroom, self.classroom_2)
 
     def test_most_recent_posts_are_seen_first(self):
-        pass
+        yesterday = timezone.now() + timezone.timedelta(days=-1)
+        last_week = timezone.now() + timezone.timedelta(days=-7)
 
-    def test_only_user_who_created_a_post_can_edit_it(self):
-        pass
+        self.post_1.created_on = last_week
+        self.post_2.created_on = yesterday
+
+        self.post_1.save()
+        self.post_2.save()
+
+        latest_post = Post.objects.all()[0]
+        self.assertEqual(latest_post, self.post_2)
+
+    def test_only_user_who_created_a_post_can_update_it(self):
+        self.assertTrue(self.post_1.can_update(self.user_1))
+        self.assertTrue(self.post_2.can_update(self.user_2))
+
+        self.assertFalse(self.post_1.can_update(self.user_2))
+        self.assertFalse(self.post_1.can_update(self.user_2))
 
     def test_only_user_who_created_a_post_can_delete_it(self):
-        pass
+        self.assertTrue(self.post_1.can_delete(self.user_1))
+        self.assertTrue(self.post_2.can_delete(self.user_2))
 
-    def test_super_user_can_edit_any_post(self):
-        pass
+        self.assertFalse(self.post_1.can_delete(self.user_2))
+        self.assertFalse(self.post_1.can_delete(self.user_2))
+
+    def test_super_user_can_update_any_post(self):
+        self.assertTrue(self.post_1.can_update(self.super_user))
+        self.assertTrue(self.post_2.can_update(self.super_user))
 
     def test_super_user_can_delete_any_post(self):
-        pass
-
-    def test_student_who_is_not_enrolled_cannot_create_a_post(self):
-        pass
+        self.assertTrue(self.post_1.can_delete(self.super_user))
+        self.assertTrue(self.post_2.can_delete(self.super_user))
 
     def test_edit_timestamp_reflects_latest_edit(self):
-        pass
+        yesterday = timezone.now() + timezone.timedelta(days=-1)
+        last_week = timezone.now() + timezone.timedelta(days=-7)
+
+        self.post_1.created_on = last_week
+        self.post_2.created_on = yesterday
+
+        self.post_1.save()
+        self.post_2.save()
+
+        self.post_1.title = 'Greatness from small beginnings'
+        self.post_2.content = 'In the darkest of times you will see the brightest of stars'
+
+        self.post_1.save()
+        self.post_2.save()
+
+        self.assertEqual(self.post_1.updated_on.minute, timezone.now().minute)
+        self.assertEqual(self.post_2.updated_on.minute, timezone.now().minute)
