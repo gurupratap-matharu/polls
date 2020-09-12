@@ -6,6 +6,8 @@ from pages.factories import UserFactory
 from pages.views import (AboutPageView, ContactPageView, FeedbackPageView,
                          HomePageView)
 
+IRRELEVANT_RESPONSE = 'Hi I should not be on this page!'
+
 
 class HomePageTests(TestCase):
     def setUp(self):
@@ -19,7 +21,7 @@ class HomePageTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'pages/home.html')
         self.assertContains(response, 'Home')
-        self.assertNotContains(response, 'Hi I should not be on this page!')
+        self.assertNotContains(response, IRRELEVANT_RESPONSE)
         self.assertEqual(no_response.status_code, 404)
 
     def test_home_page_works_for_anonymous_user(self):
@@ -29,7 +31,7 @@ class HomePageTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'pages/home.html')
         self.assertContains(response, 'Home')
-        self.assertNotContains(response, 'Hi I should not be on this page!')
+        self.assertNotContains(response, IRRELEVANT_RESPONSE)
         self.assertEqual(no_response.status_code, 404)
 
     def test_home_page_resolves_homepageview(self):
@@ -49,7 +51,7 @@ class AboutPageTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'pages/about.html')
         self.assertContains(response, 'About')
-        self.assertNotContains(response, 'Hi I should not be on this page!')
+        self.assertNotContains(response, IRRELEVANT_RESPONSE)
         self.assertEqual(no_response.status_code, 404)
 
     def test_about_page_works_for_anonymous_user(self):
@@ -59,7 +61,7 @@ class AboutPageTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'pages/about.html')
         self.assertContains(response, 'About')
-        self.assertNotContains(response, 'Hi I should not be on this page!')
+        self.assertNotContains(response, IRRELEVANT_RESPONSE)
         self.assertEqual(no_response.status_code, 404)
 
     def test_about_page_resolve_aboutpageview(self):
@@ -79,7 +81,7 @@ class ContactPageTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'pages/contact.html')
         self.assertContains(response, 'Contact')
-        self.assertNotContains(response, 'Hi I should not be on this page!')
+        self.assertNotContains(response, IRRELEVANT_RESPONSE)
         self.assertEqual(no_response.status_code, 404)
 
     def test_contact_page_works_for_anonymous_user(self):
@@ -89,7 +91,7 @@ class ContactPageTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'pages/contact.html')
         self.assertContains(response, 'Contact')
-        self.assertNotContains(response, 'Hi I should not be on this page!')
+        self.assertNotContains(response, IRRELEVANT_RESPONSE)
         self.assertEqual(no_response.status_code, 404)
 
     def test_contact_page_resolve_contactpageview(self):
@@ -109,7 +111,7 @@ class FeedbackPageTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'pages/feedback.html')
         self.assertContains(response, 'Feedback')
-        self.assertNotContains(response, 'Hi I should not be on this page!')
+        self.assertNotContains(response, IRRELEVANT_RESPONSE)
         self.assertEqual(no_response.status_code, 404)
 
     def test_feedback_page_works_for_anonymous_user(self):
@@ -119,7 +121,7 @@ class FeedbackPageTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'pages/feedback.html')
         self.assertContains(response, 'Feedback')
-        self.assertNotContains(response, 'Hi I should not be on this page!')
+        self.assertNotContains(response, IRRELEVANT_RESPONSE)
         self.assertEqual(no_response.status_code, 404)
 
     def test_feedback_page_resolves_feedbackpageview(self):
