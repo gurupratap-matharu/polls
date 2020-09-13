@@ -1,0 +1,36 @@
+name: Test Workflow
+
+on:
+  push:
+    branches: [master, development]
+  pull_request:
+    branches: [master, development]
+  schedule:
+    - cron: '0 4 * * 3'
+
+jobs:
+  tests:
+    name: Run Django Tests
+    runs-on: ubuntu-latest
+
+    services:
+      image: postgres
+      env:
+      - POSTGRES_USER: postgres
+      - POSTGRES_PASSWORD: postgres
+      - POSTGRES_DB: postgres
+      ports:
+      - 5432:5432
+      options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Python 3.7.7
+    - uses: actions/setup-python@v1
+      with:
+        python-version: 3.7.7
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+    - name: Run Tests
+      run: python manage.py test
+            
