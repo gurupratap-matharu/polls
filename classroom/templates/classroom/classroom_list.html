@@ -15,6 +15,12 @@
         </p>
     </button>
 </div>
+{% if not classroom_list %}
+<div class="d-flex justify-content-center align-items-center" style="height: 500px;">
+    <p class="lead text-justify">Pretty empty over here. Get the classcode from your teacher to enroll into your class!
+    </p>
+</div>
+{% else %}
 <div class="row">
     {% for classroom in classroom_list %}
     <div class="col-12 col-lg-6 col-xl-3">
@@ -50,4 +56,5 @@
     </div>
     {% endfor %}
 </div>
+{% endif %}
 {% endblock content %}
