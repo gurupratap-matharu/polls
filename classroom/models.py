@@ -39,7 +39,7 @@ class Classroom(models.Model):
         return user.is_superuser or self.created_by == user
 
     def get_enrollment(self, user):
-        return self.enrollment_set.get(student=user)
+        return self.enrollments.get(student=user)
 
 
 class Enrollment(models.Model):
