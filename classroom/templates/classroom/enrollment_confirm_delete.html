@@ -1,6 +1,6 @@
 {% extends 'classroom/_classroom_base.html' %}
 {% load crispy_forms_tags %}
-{% block title %}Delete{% endblock title %}
+{% block title %}Unenroll{% endblock title %}
 
 {% block content %}
 <div class="container">
@@ -12,9 +12,9 @@
     </a>
     <hr class="p-2">
 
-    <p class="lead text-danger"><strong>Delete?</strong></p>
-    <p class="lead">Are you sure that you ({{ object.student.email }}) wish to unenroll from the classroom
-        <strong>{{ object.classroom }}</strong>?</p>
+    <p class="lead text-danger"><strong>Unenroll?</strong></p>
+    <p class="lead">Are you sure that you ({{ enrollment.student.email }}) wish to unenroll from the classroom
+        <strong>{{ enrollment.classroom }}</strong>?</p>
 
     <form action="" method="post">
         {% csrf_token %}
