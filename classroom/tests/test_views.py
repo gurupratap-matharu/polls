@@ -224,10 +224,9 @@ class EnrollmentCreateTests(TestCase):
 
     def test_valid_enrollment_code_submission_works_correctly(self):
         code = str(self.classroom.id)
+        self.client.force_login(self.user)
         response = self.client.post(reverse('enroll'), data={'code': code})
-
         self.assertEqual(response.status_code, 302)
-        print(Enrollment.objects.all())
         self.assertEqual(Enrollment.objects.count(), 1)
 
         enrollment = Enrollment.objects.all()[0]
@@ -244,13 +243,8 @@ class EnrollmentCreateTests(TestCase):
         request.user = self.user
 
         response = EnrollmentCreate.as_view()(request)
-        no_response = self.client.post('/enrollment/')
 
         self.assertEqual(response.status_code, 302)
-        self.assertTemplateUsed(response, 'classroom/enrollment_form.html')
-        self.assertContains(response, 'Enroll')
-        self.assertNotContains(response, 'Hi I should not be on this page!')
-        self.assertEqual(no_response.status_code, 404)
 
         enrollment = Enrollment.objects.all()[0]
 
@@ -271,8 +265,6 @@ class EnrollmentCreateTests(TestCase):
         response = EnrollmentCreate.as_view()(request)
 
         self.assertEqual(response.status_code, 302)
-        self.assertContains(response, 'Enroll')
-        self.assertNotContains(response, 'Hi I should not be on this page!')
         self.assertEqual(Enrollment.objects.count(), 1)
 
     def test_valid_code_for_existing_enrollment_redirects_with_proper_message(self):
