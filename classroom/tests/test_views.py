@@ -1,6 +1,7 @@
 import uuid
 
 from django.contrib.auth import get_user_model
+from django.contrib.messages import get_messages
 from django.contrib.messages.storage.fallback import FallbackStorage
 from django.test import RequestFactory, TestCase
 from django.urls import resolve, reverse
@@ -256,19 +257,14 @@ class EnrollmentCreateTests(TestCase):
         code = str(self.classroom.id)
         _ = EnrollmentFactory(student=self.user, classroom=self.classroom)
 
-        request = self.factory.post(reverse('enroll'), data={'code': code})
-        setattr(request, 'session', 'session')
-        messages = FallbackStorage(request)
-        setattr(request, '_messages', messages)
-        request.user = self.user
-
-        response = EnrollmentCreate.as_view()(request)
+        self.client.force_login(self.user)
+        response = self.client.post(reverse('enroll'), data={'code': code})
+        messages = list(get_messages(response.wsgi_request))
 
         self.assertEqual(response.status_code, 302)
+        self.assertEqual(len(messages), 1)
+        self.assertIn('You are already enrolled in', str(messages[0]))
         self.assertEqual(Enrollment.objects.count(), 1)
-
-    def test_valid_code_for_existing_enrollment_redirects_with_proper_message(self):
-        pass
 
 
 class EnrollmentDeleteTests(TestCase):
