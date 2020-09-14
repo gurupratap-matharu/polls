@@ -7,7 +7,7 @@ from django.test import RequestFactory, TestCase
 from django.urls import resolve, reverse
 
 from classroom.factories import (ClassroomFactory, EnrollmentFactory,
-                                 UserFactory)
+                                 PostFactory, UserFactory)
 from classroom.forms import EnrollmentForm, PostForm
 from classroom.models import Classroom, Enrollment
 from classroom.views import (ClassroomCreate, ClassroomDelete,
@@ -18,11 +18,13 @@ from classroom.views import (ClassroomCreate, ClassroomDelete,
 
 class ClassroomListTests(TestCase):
     def setUp(self):
-        self.user = get_user_model().objects.create_user(
-            username='testuser',
-            email='testuser@email.com',
-            password='testpass123'
-        )
+        self.user = UserFactory()
+
+        self.classroom_1 = ClassroomFactory(created_by=self.user)
+        self.classroom_2 = ClassroomFactory()
+        self.classroom_3 = ClassroomFactory()
+
+        self.enrollment_1 = EnrollmentFactory(classroom=self.classroom_2, student=self.user)
 
     def test_classroom_list_redirects_for_anonymous_or_logged_out_user(self):
         response = self.client.get(reverse('classroom_list'))
@@ -40,7 +42,9 @@ class ClassroomListTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'classroom/classroom_list.html')
         self.assertContains(response, 'Classroom')
-        self.assertEqual(list(response.context['object_list']), list(Classroom.objects.all()))
+        self.assertContains(response, self.classroom_1.name)
+        self.assertContains(response, self.classroom_2.name)
+        self.assertEqual(len(response.context['object_list']), 2)
         self.assertNotContains(response, 'Hi I should not be on this page!')
         self.assertEqual(no_response.status_code, 404)
 
@@ -51,15 +55,10 @@ class ClassroomListTests(TestCase):
 
 class ClassroomDetailTests(TestCase):
     def setUp(self):
-        self.user = get_user_model().objects.create_user(
-            username='testuser',
-            email='testuser@email.com',
-            password='testpass123'
-        )
-        self.classroom = Classroom.objects.create(
-            name='Testclass',
-            created_by=self.user
-        )
+        self.user = UserFactory()
+        self.classroom = ClassroomFactory()
+        self.post_1 = PostFactory(classroom=self.classroom, author=self.user)
+        self.post_2 = PostFactory(classroom=self.classroom, author=self.user)
 
     def test_classroom_detail_redirects_for_anonymous_or_logged_out_user(self):
         response = self.client.get(self.classroom.get_absolute_url())
@@ -90,6 +89,13 @@ class ClassroomDetailTests(TestCase):
         view = resolve(self.classroom.get_absolute_url())
         self.assertEqual(view.func.__name__, ClassroomDetailView.as_view().__name__)
 
+    def test_classroom_detail_contains_all_posts_for_that_classroom(self):
+        self.client.force_login(self.user)
+        response = self.client.get(self.classroom.get_absolute_url())
+
+        self.assertContains(response, self.post_1.title)
+        self.assertContains(response, self.post_2.title)
+
 
 class ClassroomCreateTests(TestCase):
     def setUp(self):
@@ -104,7 +110,7 @@ class ClassroomCreateTests(TestCase):
         self.assertTemplateNotUsed(response, 'classroom/classroom_form.html')
         self.assertEqual(no_response.status_code, 404)
 
-    def test_classroom_create_works_for_logged_in_user(self):
+    def test_classroom_create_view_works_for_logged_in_user(self):
         self.client.force_login(self.user)
         response = self.client.get(reverse('classroom_create'))
         no_response = self.client.get('/class/create/')
@@ -115,6 +121,19 @@ class ClassroomCreateTests(TestCase):
         self.assertNotContains(response, 'Hi I should not be on this page!')
         self.assertTemplateUsed(response, 'classroom/classroom_form.html')
         self.assertEqual(no_response.status_code, 404)
+
+    def test_classroom_create_with_valid_data_creates_a_new_classroom(self):
+        self.client.force_login(self.user)
+        response = self.client.post(reverse('classroom_create'), data={'name': 'test_class'})
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(Classroom.objects.count(), 2)
+        self.assertEqual(Classroom.objects.all()[0].created_by, self.user)
+        self.assertEqual(Classroom.objects.all()[1].created_by, self.user)
+
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), "test_class successfully created!")
 
     def test_classroom_create_resolve_classroomcreateview(self):
         view = resolve(reverse('classroom_create'))
@@ -151,6 +170,16 @@ class ClassroomUpdateTests(TestCase):
         view = resolve(self.classroom.get_update_url())
         self.assertEqual(view.func.__name__, ClassroomUpdate.as_view().__name__)
 
+    def test_classroom_update_with_valid_post_data_updates_existing_classroom(self):
+        self.client.force_login(self.user)
+        response = self.client.post(self.classroom.get_update_url(), data={'name': 'Learn Astronomy'})
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(Classroom.objects.count(), 1)
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), "Learn Astronomy successfully updated!")
+
 
 class ClassroomDeleteTests(TestCase):
     def setUp(self):
@@ -176,6 +205,12 @@ class ClassroomDeleteTests(TestCase):
         self.assertContains(response, 'Confirm')
         self.assertNotContains(response, 'Hi I should not be on this page!')
         self.assertEqual(no_response.status_code, 404)
+
+    def test_classroom_delete_with_valid_post_data_deletes_the_classroom(self):
+        self.client.force_login(self.user)
+        response = self.client.post(self.classroom.get_delete_url())
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(Classroom.objects.count(), 0)
 
     def test_classroom_delete_resolves_classroomdeleteview(self):
         view = resolve(self.classroom.get_delete_url())
@@ -289,7 +324,7 @@ class EnrollmentDeleteTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'classroom/enrollment_confirm_delete.html')
-        self.assertContains(response, 'Delete')
+        self.assertContains(response, 'Unenroll')
         self.assertNotContains(response, 'Hi I should not be on this page!')
         self.assertEqual(no_response.status_code, 404)
 
