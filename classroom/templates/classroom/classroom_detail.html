@@ -7,8 +7,19 @@
 
 <div class="container">
     <div class="jumbotron">
+        <div class="d-flex justify-conten mt-n5 mx-n2">
+            <a class="ml-auto text-decoration-none text-dark" role="button" id="dropdownMenuLink" aria-haspopup="true"
+                aria-expanded="false" data-toggle="dropdown" href="{{ classroom.get_absolute_url }}">
+                <i class="fa fa-cog fa-lg" aria-hidden="true"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                <a class="dropdown-item" href="" type="button">Get class code</a>
+                <a class="dropdown-item" href="{{ enrollment.get_delete_url }}" type="button">Un Enroll</a>
+            </div>
+        </div>
         <h1 class="display-4">{{ classroom }}</h1>
         <p class="lead">{{ classroom.subject }} | {{ classroom.section }} | {{ classroom.room }}</p>
+
     </div>
     <p>
         <a href="#postForm" class="btn btn-light btn-block p-3 text-left" data-toggle="collapse" role="button"
