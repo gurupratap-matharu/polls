@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="container">
-    <a href="{{ classroom.get_absolute_url }}" class="text-dark text-decoration-none">
+    <a href="{{ request.META.HTTP_REFERER }}" class="text-dark text-decoration-none">
         <div class="d-flex">
             <i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i>
             <p class="lead ml-2">Back</p>
@@ -15,6 +15,7 @@
     <p class="lead text-danger"><strong>Delete?</strong></p>
     <p class="lead">Are you sure that you ({{ object.student.email }}) wish to unenroll from the classroom
         <strong>{{ object.classroom }}</strong>?</p>
+
     <form action="" method="post">
         {% csrf_token %}
         {{ form|crispy }}
