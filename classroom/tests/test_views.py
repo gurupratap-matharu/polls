@@ -209,8 +209,12 @@ class ClassroomDeleteTests(TestCase):
     def test_classroom_delete_with_valid_post_data_deletes_the_classroom(self):
         self.client.force_login(self.user)
         response = self.client.post(self.classroom.get_delete_url())
+
         self.assertEqual(response.status_code, 302)
         self.assertEqual(Classroom.objects.count(), 0)
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), "Classroom successfully deleted!")
 
     def test_classroom_delete_resolves_classroomdeleteview(self):
         view = resolve(self.classroom.get_delete_url())
