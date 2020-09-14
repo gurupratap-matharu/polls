@@ -41,6 +41,9 @@ class Classroom(models.Model):
     def get_enrollment(self, user):
         return self.enrollments.filter(student=user).first()
 
+    def get_code(self):
+        return str(self.id)
+
 
 class Enrollment(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
