@@ -13,7 +13,8 @@
                 <i class="fa fa-cog fa-lg" aria-hidden="true"></i>
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                <a class="dropdown-item" href="" type="button">Get class code</a>
+                <a class="dropdown-item" href="" type="button" data-toggle="modal" data-target="#exampleModalCenter">Get
+                    class code</a>
                 <a class="dropdown-item" href="{{ enrollment.get_delete_url }}" type="button">Un Enroll</a>
             </div>
         </div>
@@ -61,4 +62,5 @@
     {% endfor %}
 </div>
 
+{% include 'classroom/_classroom_modal.html' %}
 {% endblock content %}
