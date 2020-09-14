@@ -60,6 +60,7 @@ class ClassroomDetailView(LoginRequiredMixin, FormMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['can_edit'] = self.object.can_edit(self.request.user)
+        context['enrollment'] = self.object.get_enrollment(self.request.user)
         logger.info('can_edit:%s', context['can_edit'])
         return context
 
