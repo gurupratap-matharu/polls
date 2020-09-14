@@ -296,3 +296,18 @@ class EnrollmentDeleteTests(TestCase):
     def test_enrollment_delete_resolves_enrollmentdeleteview(self):
         view = resolve(self.enrollment.get_delete_url())
         self.assertEqual(view.func.__name__, EnrollmentDelete.as_view().__name__)
+
+    def test_enrollment_deletion_works_for_existing_enrollment_and_logged_in_user(self):
+        pass
+
+    def test_enrollment_deletion_raises_correct_message_for_non_existing_enrollment(self):
+        pass
+
+    def test_enrollment_deletion_raises_correct_message_for_non_existing_classroom(self):
+        pass
+
+    def test_only_user_who_is_already_enrolled_can_unenroll_itself_while_others_cant(self):
+        pass
+
+    def test_superuser_can_unenroll_any_student(self):
+        pass
