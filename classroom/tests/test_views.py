@@ -6,7 +6,7 @@ from django.test import RequestFactory, TestCase
 from django.urls import resolve, reverse
 
 from classroom.factories import (ClassroomFactory, EnrollmentFactory,
-                                 PostFactory, UserFactory)
+                                 PostFactory, UserFactory, get_super_user)
 from classroom.forms import EnrollmentForm, PostForm
 from classroom.models import Classroom, Enrollment
 from classroom.views import (ClassroomCreate, ClassroomDelete,
@@ -312,7 +312,9 @@ class EnrollmentCreateTests(TestCase):
 
 class EnrollmentDeleteTests(TestCase):
     def setUp(self):
+        self.superuser = get_super_user()
         self.user = UserFactory()
+        self.unauthorized_user = UserFactory()
         self.classroom = ClassroomFactory(created_by=self.user)
         self.enrollment = EnrollmentFactory(student=self.user,
                                             classroom=self.classroom)
@@ -371,11 +373,20 @@ class EnrollmentDeleteTests(TestCase):
         self.assertEqual(response_1.status_code, 404)
         self.assertEqual(response_2.status_code, 404)
 
-    def test_enrollment_deletion_raises_correct_message_for_non_existing_classroom(self):
-        pass
-
     def test_only_user_who_is_already_enrolled_can_unenroll_itself_while_others_cant(self):
-        pass
+        self.client.force_login(self.unauthorized_user)
+
+        response = self.client.post(self.enrollment.get_delete_url())
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(Enrollment.objects.all().count(), 1)
 
     def test_superuser_can_unenroll_any_student(self):
-        pass
+        self.client.force_login(self.superuser)
+        response = self.client.post(self.enrollment.get_delete_url())
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(Enrollment.objects.all().count(), 0)
+
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), 'You have unenrolled successfully!')
