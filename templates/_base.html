@@ -46,10 +46,8 @@
                     </button>
                     <div class="dropdown-menu dropdown-menu-right" style="width: 300px;">
                         <div class="my-5">
-                            <button class="dropdown-item text-center text-capitalize"
-                                type="button"><strong>{{ user.get_full_name }}</strong></button>
-                            <button class="dropdown-item text-center font-weight-light"
-                                type="button">{{ user.email }}</button>
+                            <p class="text-center">{{ user.get_full_name }}</p>
+                            <p class="text-center font-weight-light">{{ user.email }}</p>
                         </div>
                         <div class="dropdown-divider"></div>
                         <a href="{% url 'account_logout' %}" class="dropdown-item p-md-3 text-center">
