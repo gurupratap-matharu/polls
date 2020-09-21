@@ -59,7 +59,7 @@ class ClassroomDetailView(LoginRequiredMixin, FormMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['can_edit'] = self.object.can_edit(self.request.user)
+        context['can_edit'] = self.object.can_update(self.request.user)
         context['enrollment'] = self.object.get_enrollment(self.request.user)
         logger.info('can_edit:%s', context['can_edit'])
         return context
@@ -87,6 +87,13 @@ class ClassroomDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Classroom
     success_url = reverse_lazy('classroom_list')
     success_message = "Classroom successfully deleted!"
+
+    def get_object(self, queryset=None):
+        obj = super().get_object()
+        if not obj.can_delete(self.request.user):
+            logger.warning('Possible attack: \nuser: %s\nobj: %s', self.request.user, obj)
+            raise Http404
+        return obj
 
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, self.success_message)
