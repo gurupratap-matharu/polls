@@ -27,7 +27,22 @@
 {% block content %}
 
 <div class="container">
-    <p class="lead">People in the world</p>
+    <div class="mb-5">
+        <div class="d-flex mb-5 justify-content-between align-items-baseline text-primary border-bottom border-primary">
+            <p class="display-4">Teachers</p>
+            <p class="lead">? teachers</p>
+        </div>
+        {{ classroom.created_by }}
+    </div>
+    <hr>
+    <div class="d-flex mb-5 justify-content-between align-items-baseline text-primary border-bottom border-primary">
+        <p class="display-4">Classmates</p>
+        <p class="lead">{{ classroom.students.count }} students</p>
+    </div>
+    {% for student in classroom.students.all %}
+    {{ student }}
+    <hr>
+    {% endfor %}
 </div>
 
 {% include 'classroom/_classroom_modal.html' %}
