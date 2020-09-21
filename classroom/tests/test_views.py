@@ -11,8 +11,8 @@ from classroom.forms import EnrollmentForm, PostForm
 from classroom.models import Classroom, Enrollment
 from classroom.views import (ClassroomCreate, ClassroomDelete,
                              ClassroomDetailView, ClassroomListView,
-                             ClassroomUpdate, EnrollmentCreate,
-                             EnrollmentDelete)
+                             ClassroomPeopleView, ClassroomUpdate,
+                             EnrollmentCreate, EnrollmentDelete)
 
 
 class ClassroomListTests(TestCase):
@@ -219,6 +219,45 @@ class ClassroomDeleteTests(TestCase):
     def test_classroom_delete_resolves_classroomdeleteview(self):
         view = resolve(self.classroom.get_delete_url())
         self.assertEqual(view.func.__name__, ClassroomDelete.as_view().__name__)
+
+
+class ClassroomPeopleTests(TestCase):
+    def setUp(self):
+        self.user = UserFactory()
+        self.user_1 = UserFactory()
+        self.user_2 = UserFactory()
+
+        self.classroom = ClassroomFactory(created_by=self.user)
+
+        self.enrollment_1 = EnrollmentFactory(classroom=self.classroom, student=self.user_1)
+        self.enrollment_2 = EnrollmentFactory(classroom=self.classroom, student=self.user_2)
+
+    def test_classroom_people_resolve_classroompeopleview(self):
+        view = resolve(self.classroom.get_people_url())
+        self.assertEqual(view.func.__name__, ClassroomPeopleView.as_view().__name__)
+
+    def test_classroom_people_redirects_for_logged_out_user(self):
+        response = self.client.get(self.classroom.get_people_url())
+        no_response = self.client.get('/classroom/1234/people/')
+
+        self.assertEqual(response.status_code, 302)
+        self.assertTemplateNotUsed(response, 'classroom/classroom_people.html')
+        self.assertEqual(no_response.status_code, 404)
+
+    def test_classroom_people_works_for_logged_in_user(self):
+        self.client.force_login(self.user)
+        response = self.client.get(self.classroom.get_people_url())
+        no_response = self.client.get('/classroom/1243/people/')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'classroom/classroom_people.html')
+        self.assertContains(response, 'Classmates')
+        self.assertContains(response, self.classroom.name)
+        self.assertContains(response, self.user_1)
+        self.assertContains(response, self.user_2)
+
+        self.assertNotContains(response, 'Hi I should not be on this page!')
+        self.assertEqual(no_response.status_code, 404)
 
 
 class EnrollmentCreateTests(TestCase):
