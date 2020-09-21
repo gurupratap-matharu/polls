@@ -44,18 +44,38 @@
                         aria-expanded="false">
                         <i class="fa fa-user-circle-o fa-lg" aria-hidden="true"></i>
                     </button>
-                    <div class="dropdown-menu dropdown-menu-right pt-4 px-2">
-                        <button class="dropdown-item text-center text-capitalize"
-                            type="button"><strong>{{ user.get_full_name }}</strong></button>
-                        <button class="dropdown-item font-weight-light" type="button">{{ user.email }}</button>
+                    <div class="dropdown-menu dropdown-menu-right" style="width: 300px;">
+                        <div class="my-5">
+                            <button class="dropdown-item text-center text-capitalize"
+                                type="button"><strong>{{ user.get_full_name }}</strong></button>
+                            <button class="dropdown-item text-center font-weight-light"
+                                type="button">{{ user.email }}</button>
+                        </div>
                         <div class="dropdown-divider"></div>
-                        <button class="dropdown-item text-center p-3" type="button">
-                            <a href="{% url 'account_logout' %}" class="text-decoration-none text-dark">
-                                <i class="fa fa-sign-out fa-lg" aria-hidden="true"></i>
-                                Logout
+                        <a href="{% url 'account_logout' %}" class="dropdown-item p-md-3 text-center">
+                            <i class="fa fa-sign-out fa-lg" aria-hidden="true"></i>
+                            Signout
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <div class="d-flex justify-content-around p-md-3">
+                            <a href="{% url 'pages:feedback' %}">
+                                <button type="submit" class="btn btn-light btn-sm">
+                                    <small>Feedback</small>
+                                </button>
                             </a>
-                        </button>
+                            <a href="">
+                                <button type="submit" class="btn btn-light btn-sm">
+                                    <small>Privacy</small>
+                                </button>
+                            </a>
+                            <a href="">
+                                <button type="submit" class="btn btn-light btn-sm">
+                                    <small>Terms of service</small>
+                                </button>
+                            </a>
+                        </div>
                     </div>
+
                 </div>
                 {% else %}
                 <a class="p-2 text-dark text-decoration-none" href="{% url 'account_login' %}">
@@ -65,6 +85,7 @@
                     <i class="fa fa-user-plus" aria-hidden="true"></i>
                 </a>
                 {% endif %}
+
             </nav>
         </div>
     </header>
@@ -73,12 +94,6 @@
         {% block content %}
         {% endblock content %}
     </div>
-    <a href="{% url 'pages:feedback' %}" class="text-dark">
-        <button type="submit" class="btn fixed-bottom p-3">
-            <i class="fa fa-question-circle-o fa-lg" aria-hidden="true">
-            </i>
-        </button>
-    </a>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
