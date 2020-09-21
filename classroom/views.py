@@ -23,7 +23,6 @@ class ClassroomListView(LoginRequiredMixin, ListView):
     template_name = 'classroom/classroom_list.html'
 
     def get_queryset(self):
-        logger.info('Veer you are on the classroom page')
         return self.model.objects.filter(
             Q(students=self.request.user) | Q(created_by=self.request.user)
         ).distinct()
@@ -81,6 +80,13 @@ class ClassroomUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     fields = ['name', 'section', 'subject', 'room']
     template_name = 'classroom/classroom_update_form.html'
     success_message = "%(name)s successfully updated!"
+
+    def get_object(self, queryset=None):
+        obj = super().get_object()
+        if not obj.can_update(self.request.user):
+            logger.warning('Possible attack: \nuser: %s\nobj: %s', self.request.user, obj)
+            raise Http404
+        return obj
 
 
 class ClassroomDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
