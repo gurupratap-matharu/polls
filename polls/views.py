@@ -1,12 +1,17 @@
+import logging
+
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.http import Http404
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.generic import DetailView, ListView, TemplateView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
 from polls.models import Question
+
+logger = logging.getLogger(__name__)
 
 
 class QuestionListView(ListView):
@@ -38,11 +43,25 @@ class QuestionUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     template_name_suffix = '_update_form'
     success_message = 'Question updated successfully!'
 
+    def get_object(self, queryset=None):
+        obj = super().get_object()
+        if not obj.can_update(self.request.user):
+            logger.warning('Possible attack: \nuser: %s\nobj: %s', self.request.user, obj)
+            raise Http404
+        return obj
+
 
 class QuestionDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Question
     success_url = reverse_lazy('polls:question_list')
     success_message = 'Question deleted successfully!'
+
+    def get_object(self, queryset=None):
+        obj = super().get_object()
+        if not obj.can_delete(self.request.user):
+            logger.warning('Possible attack: \nuser: %s\nobj: %s', self.request.user, obj)
+            raise Http404
+        return obj
 
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, self.success_message)

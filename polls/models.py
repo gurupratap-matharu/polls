@@ -30,6 +30,12 @@ class Question(models.Model):
     def get_delete_url(self):
         return reverse('polls:question_delete', args=[str(self.id)])
 
+    def can_update(self, user):
+        return user.is_superuser or self.created_by == user
+
+    def can_delete(self, user):
+        return user.is_superuser or self.created_by == user
+
 
 class Choice(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
