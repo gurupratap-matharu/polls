@@ -1,6 +1,5 @@
 import uuid
 
-from django.contrib.auth import get_user_model
 from django.contrib.messages import get_messages
 from django.contrib.messages.storage.fallback import FallbackStorage
 from django.test import RequestFactory, TestCase
@@ -212,6 +211,7 @@ class ClassroomDeleteTests(TestCase):
 
         self.assertEqual(response.status_code, 302)
         self.assertEqual(Classroom.objects.count(), 0)
+
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
         self.assertEqual(str(messages[0]), "Classroom successfully deleted!")
