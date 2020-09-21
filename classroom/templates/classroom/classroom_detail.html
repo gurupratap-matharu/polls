@@ -2,7 +2,19 @@
 {% load crispy_forms_tags %}
 {% block appname %}{{ classroom.name|title }}{% endblock appname %}
 {% block title %}{{ classroom.name }}{% endblock title %}
-
+{% block navcenter %}
+<nav class="m-auto">
+    <a class="p-2 text-dark text-decoration-none" href="">
+        Stream
+    </a>
+    <a class="p-2 text-dark text-decoration-none" href="">
+        Classwork
+    </a>
+    <a class="p-2 text-dark text-decoration-none" href="">
+        People
+    </a>
+</nav>
+{% endblock navcenter %}
 {% block content %}
 
 <div class="container">
