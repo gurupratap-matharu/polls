@@ -3,7 +3,7 @@ from django.test import TestCase
 from django.utils import timezone
 
 from classroom.factories import (ClassroomFactory, EnrollmentFactory,
-                                 PostFactory, UserFactory)
+                                 PostFactory, UserFactory, get_super_user)
 from classroom.models import Classroom, Enrollment, Post
 
 
@@ -132,23 +132,48 @@ class ClassroomTests(TestCase):
 
 
 class EnrollmentTests(TestCase):
+    def setUp(self):
+        self.superuser = get_super_user()
+        self.user_1 = UserFactory()
+        self.user_2 = UserFactory()
+
+        self.classroom_1 = ClassroomFactory()
+        self.classroom_2 = ClassroomFactory()
+
+        self.enrollment_1 = EnrollmentFactory(student=self.user_1, classroom=self.classroom_1)
+        self.enrollment_2 = EnrollmentFactory(student=self.user_2, classroom=self.classroom_2)
+
     def test_enrollment_creation_between_user_and_classroom(self):
-        user_1 = UserFactory()
-        user_2 = UserFactory()
-
-        classroom_1 = ClassroomFactory()
-        classroom_2 = ClassroomFactory()
-
-        enrollment_1 = EnrollmentFactory(student=user_1, classroom=classroom_1)
-        enrollment_2 = EnrollmentFactory(student=user_2, classroom=classroom_2)
 
         self.assertEqual(Enrollment.objects.count(), 2)
 
-        self.assertEqual(enrollment_1.student, user_1)
-        self.assertEqual(enrollment_1.classroom, classroom_1)
+        self.assertEqual(self.enrollment_1.student, self.user_1)
+        self.assertEqual(self.enrollment_1.classroom, self.classroom_1)
 
-        self.assertEqual(enrollment_2.student, user_2)
-        self.assertEqual(enrollment_2.classroom, classroom_2)
+        self.assertEqual(self.enrollment_2.student, self.user_2)
+        self.assertEqual(self.enrollment_2.classroom, self.classroom_2)
+
+    def test_enrollment_student_can_update_the_enrollment(self):
+        self.assertTrue(self.enrollment_1.can_update(self.user_1))
+
+    def test_enrollement_cannot_be_updated_by_other_student(self):
+        self.assertFalse(self.enrollment_1.can_update(self.user_2))
+        self.assertFalse(self.enrollment_2.can_update(self.user_1))
+
+    def test_enrollment_student_can_delete_the_enrollment(self):
+        self.assertTrue(self.enrollment_2.can_update(self.user_2))
+
+    def test_enrollement_cannot_be_deleted_by_other_student(self):
+        self.assertFalse(self.enrollment_1.can_delete(self.user_2))
+        self.assertFalse(self.enrollment_2.can_delete(self.user_1))
+
+    def test_super_user_can_update_any_enrollment(self):
+        self.assertTrue(self.enrollment_1.can_update(self.superuser))
+        self.assertTrue(self.enrollment_2.can_update(self.superuser))
+
+    def test_super_user_can_delete_any_enrollment(self):
+        self.assertTrue(self.enrollment_1.can_delete(self.superuser))
+        self.assertTrue(self.enrollment_2.can_delete(self.superuser))
 
 
 class PostTests(TestCase):

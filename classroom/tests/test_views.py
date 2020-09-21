@@ -273,6 +273,10 @@ class EnrollmentCreateTests(TestCase):
         self.assertEqual(enrollment.classroom, self.classroom)
         self.assertEqual(enrollment.student, self.user)
 
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), "Great! You have enrolled successfully.")
+
     def test_valid_code_for_existing_class_creates_enrollment(self):
         code = str(self.classroom.id)
 
@@ -337,10 +341,35 @@ class EnrollmentDeleteTests(TestCase):
         self.assertEqual(view.func.__name__, EnrollmentDelete.as_view().__name__)
 
     def test_enrollment_deletion_works_for_existing_enrollment_and_logged_in_user(self):
-        pass
+        self.assertEqual(Enrollment.objects.all().count(), 1)
+
+        self.client.force_login(self.user)
+        response = self.client.post(self.enrollment.get_delete_url())
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(Enrollment.objects.all().count(), 0)
+
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), 'You have unenrolled successfully!')
 
     def test_enrollment_deletion_raises_correct_message_for_non_existing_enrollment(self):
-        pass
+        self.assertEqual(Enrollment.objects.all().count(), 1)
+
+        invalid_enrollment = EnrollmentFactory()
+
+        invalid_enrollment_url_1 = invalid_enrollment.get_delete_url()
+        invalid_enrollment_url_2 = f'/classroom/enroll/{uuid.uuid4()}/delete/'
+
+        invalid_enrollment.delete()
+        self.assertEqual(Enrollment.objects.all().count(), 1)
+
+        self.client.force_login(self.user)
+        response_1 = self.client.post(invalid_enrollment_url_1)
+        response_2 = self.client.post(invalid_enrollment_url_2)
+
+        self.assertEqual(response_1.status_code, 404)
+        self.assertEqual(response_2.status_code, 404)
 
     def test_enrollment_deletion_raises_correct_message_for_non_existing_classroom(self):
         pass

@@ -4,6 +4,14 @@ from django.contrib.auth import get_user_model
 from classroom.models import Classroom, Enrollment, Post
 
 
+def get_super_user():
+    return get_user_model().objects.create_superuser(
+        username='superuser',
+        email='superuser@email.com',
+        password='superpass123'
+    )
+
+
 class UserFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = get_user_model()

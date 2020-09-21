@@ -64,14 +64,20 @@ class Enrollment(models.Model):
     def get_delete_url(self):
         return reverse('enroll_delete', args=[str(self.id)])
 
+    def can_update(self, user):
+        return user.is_superuser or self.student == user
 
-STATUS = (
-    (0, "Draft"),
-    (1, "Publish")
-)
+    def can_delete(self, user):
+        return user.is_superuser or self.student == user
 
 
 class Post(models.Model):
+
+    STATUS = (
+        (0, "Draft"),
+        (1, "Publish")
+    )
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=200)
     content = models.TextField()

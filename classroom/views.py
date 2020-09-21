@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Q
-from django.http import HttpResponseForbidden
+from django.http import Http404, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, FormView, ListView
@@ -121,6 +121,13 @@ class EnrollmentDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     template_name = 'classroom/enrollment_confirm_delete.html'
     success_url = reverse_lazy('classroom_list')
     success_message = "You have unenrolled successfully!"
+
+    def get_object(self, queryset=None):
+        obj = super().get_object()
+        if not obj.can_delete(self.request.user):
+            logger.warning('Possible attack: \nuser: %s\nobj: %s', self.request.user, obj)
+            raise Http404
+        return obj
 
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, self.success_message)
