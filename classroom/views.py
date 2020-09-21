@@ -28,6 +28,12 @@ class ClassroomListView(LoginRequiredMixin, ListView):
         ).distinct()
 
 
+class ClassroomPeopleView(LoginRequiredMixin, DetailView):
+    model = Classroom
+    context_object_name = 'classroom'
+    template_name = 'classroom/classroom_people.html'
+
+
 class ClassroomDetailView(LoginRequiredMixin, FormMixin, DetailView):
     model = Classroom
     context_object_name = 'classroom'

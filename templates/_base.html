@@ -22,9 +22,11 @@
         <!-- Fixed navbar -->
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-center p-3 px-md-4\
          mb-3 bg-white border-bottom shadow-sm">
+            {% block appname %}
             <a href="{% url 'pages:home' %}" class="navbar-brand my-0 font-weight-normal">
-                {% block appname %}Polls{% endblock appname %}
+                Polls
             </a>
+            {% endblock appname %}
 
             {% block navcenter %}{% endblock navcenter %}
 
