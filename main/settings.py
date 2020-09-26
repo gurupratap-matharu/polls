@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'django_extensions',
+    'django_countries',
 
     # Local
     'users.apps.UsersConfig',
