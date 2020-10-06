@@ -43,6 +43,9 @@ INSTALLED_APPS = [
 
     # Third party
     'rest_framework',
+    'rest_framework.authtoken',
+    'rest_auth',
+
     'crispy_forms',
     'allauth',
     'allauth.account',
@@ -55,7 +58,19 @@ INSTALLED_APPS = [
     'pages.apps.PagesConfig',
     'polls.apps.PollsConfig',
     'classroom.apps.ClassroomConfig',
+    'api.apps.ApiConfig',
 ]
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+}
 
 # django-allauth config
 SITE_ID = 1
