@@ -17,9 +17,18 @@ from django.contrib import admin
 from django.urls import include, path
 
 urlpatterns = [
-    path('', include('pages.urls')),
+
+    # Django admin
     path('dj-admin/', admin.site.urls),
+
+    # User Management
     path('accounts/', include('allauth.urls')),
+
+    # API
+    path('api-auth/', include('rest_framework.urls')),
+
+    # Local apps
+    path('', include('pages.urls')),
     path('polls/', include('polls.urls')),
     path('classroom/', include('classroom.urls')),
     path('profile/', include('users.urls')),
