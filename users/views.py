@@ -5,8 +5,8 @@ from django.views.generic import CreateView, DetailView, UpdateView
 from rest_framework import generics
 
 from users.models import Profile
-from users.permissions import IsAuthorOrReadOnly
-from users.serializers import UserSerializer
+from users.permissions import IsAuthorOrReadOnly, IsProfileAuthorOrReadOnly
+from users.serializers import ProfileSerializer, UserSerializer
 
 
 class ProfileDetailView(LoginRequiredMixin, DetailView):
@@ -43,3 +43,15 @@ class UserDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = get_user_model().objects.all()
     serializer_class = UserSerializer
     permissions_classes = (IsAuthorOrReadOnly,)
+
+
+class ProfileListAPIView(generics.ListAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+    permission_classes = (IsProfileAuthorOrReadOnly,)
+
+
+class ProfileDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+    permission_classes = (IsProfileAuthorOrReadOnly,)
