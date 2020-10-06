@@ -44,12 +44,15 @@ INSTALLED_APPS = [
     # Third party
     'rest_framework',
     'rest_framework.authtoken',
-    'rest_auth',
 
-    'crispy_forms',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+
+    'rest_auth',
+    'rest_auth.registration',
+
+    'crispy_forms',
     'django_extensions',
     'django_countries',
 
