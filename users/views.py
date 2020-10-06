@@ -1,8 +1,12 @@
+from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import CreateView, DetailView, UpdateView
+from rest_framework import generics
 
 from users.models import Profile
+from users.permissions import IsAuthorOrReadOnly
+from users.serializers import UserSerializer
 
 
 class ProfileDetailView(LoginRequiredMixin, DetailView):
@@ -27,3 +31,15 @@ class ProfileUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     fields = ['bio', 'location', 'country', 'birth_date']
     template_name = 'users/profile_update_form.html'
     success_message = 'Profile updated successfully!'
+
+
+class UserListAPIView(generics.ListCreateAPIView):
+    queryset = get_user_model().objects.all()
+    serializer_class = UserSerializer
+    permissions_classes = (IsAuthorOrReadOnly,)
+
+
+class UserDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = get_user_model().objects.all()
+    serializer_class = UserSerializer
+    permissions_classes = (IsAuthorOrReadOnly,)
