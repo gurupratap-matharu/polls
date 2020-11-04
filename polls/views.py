@@ -8,8 +8,11 @@ from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.generic import DetailView, ListView, TemplateView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from rest_framework import generics
 
 from polls.models import Question
+from polls.permissions import IsAuthorOrReadOnly
+from polls.serializers import QuestionDetailSerializer, QuestionListSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -74,3 +77,15 @@ class VoteView(TemplateView):
 
 class ResultsView(TemplateView):
     template_name = 'polls/results.html'
+
+
+class QuestionListAPIView(generics.ListCreateAPIView):
+    queryset = Question.objects.all()
+    serializer_class = QuestionListSerializer
+    permission_classes = (IsAuthorOrReadOnly,)
+
+
+class QuestionDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Question.objects.all()
+    serializer_class = QuestionDetailSerializer
+    permission_classes = (IsAuthorOrReadOnly,)
