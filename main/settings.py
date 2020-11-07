@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'django_extensions',
     'django_countries',
+    'taggit',
 
     # Local
     'users.apps.UsersConfig',
@@ -85,6 +86,9 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+# django-taggit
+TAGGIT_CASE_INSENSITIVE = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
