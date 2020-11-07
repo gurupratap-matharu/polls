@@ -23,6 +23,9 @@ class ClassroomListView(LoginRequiredMixin, ListView):
     template_name = 'classroom/classroom_list.html'
 
     def get_queryset(self):
+        if self.request.user.is_superuser:
+            return self.model.objects.all()
+
         return self.model.objects.filter(
             Q(students=self.request.user) | Q(created_by=self.request.user)
         ).distinct()
