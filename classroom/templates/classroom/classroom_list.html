@@ -24,10 +24,10 @@
 <div class="row">
     {% for classroom in classroom_list %}
     <div class="col-12 col-lg-6 col-xl-3">
-        <div class="card rounded-lg shadow mb-3">
-            <div class="card-header d-flex">
+        <div class="card rounded-lg mb-4">
+            <div class="card-header border-bottom-0 bg-white d-flex">
                 <a href="{{ classroom.get_absolute_url }}" class="text-dark">
-                    <h5 class="font-weight-light">{{ classroom.name }}</h5>
+                    <h5 class="font-weight-light">{{ classroom.name|truncatechars:30 }}</h5>
                 </a>
                 <a class="ml-auto text-decoration-none text-dark" role="button" id="dropdownMenuLink"
                     aria-haspopup="true" aria-expanded="false" data-toggle="dropdown"
@@ -41,12 +41,12 @@
             </div>
             <img src="" alt="" class="card-img-top">
             <div class="card-body">
-                <p class="card-text font-weight-light">
+                <p class="card-text font-weight-light text-justify">
                     This is a wider card with supporting text below as a natural
                     lead-in to additional content. This content is a little bit longer.
                 </p>
             </div>
-            <div class="card-footer bg-white d-flex justify-content-end">
+            <div class="card-footer bg-white border-top-0 d-flex justify-content-end">
                 <button type="submit" class="btn btn-light btn-sm ml-2"><i class="fa fa-user-o"
                         aria-hidden="true"></i></button>
                 <button type="submit" class="btn btn-light btn-sm ml-2"><i class="fa fa-folder-o"
