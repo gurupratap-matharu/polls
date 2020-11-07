@@ -3,6 +3,15 @@ import uuid
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.urls import reverse
+from django.utils.translation import ugettext_lazy as _
+from taggit.managers import TaggableManager
+from taggit.models import GenericUUIDTaggedItemBase, TaggedItemBase
+
+
+class UUIDTaggedItem(GenericUUIDTaggedItemBase, TaggedItemBase):
+    class Meta:
+        verbose_name = _("Tag")
+        verbose_name_plural = _("Tags")
 
 
 class Classroom(models.Model):
@@ -16,6 +25,8 @@ class Classroom(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     students = models.ManyToManyField(get_user_model(), through='Enrollment', related_name='classes')
+
+    tags = TaggableManager(through=UUIDTaggedItem)
 
     def __str__(self):
         return self.name
