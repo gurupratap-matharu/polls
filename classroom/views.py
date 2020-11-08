@@ -47,7 +47,7 @@ class ClassroomDetailView(LoginRequiredMixin, FormMixin, DetailView):
     def get_success_url(self):
         return self.get_object().get_absolute_url()
 
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return HttpResponseForbidden()
 
