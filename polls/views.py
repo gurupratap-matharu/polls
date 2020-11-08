@@ -29,16 +29,6 @@ class QuestionDetailView(DetailView):
     context_object_name = 'question'
     template_name = 'polls/question_detail.html'
 
-    def get_object(self):
-        return get_object_or_404(
-            Question,
-            slug=self.kwargs["question"],
-            status="published",
-            pub_date__year=self.kwargs["year"],
-            pub_date__month=self.kwargs["month"],
-            pub_date__day=self.kwargs["day"],
-        )
-
 
 class QuestionCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Question
@@ -58,14 +48,7 @@ class QuestionUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_message = 'Question updated successfully!'
 
     def get_object(self, queryset=None):
-        obj = get_object_or_404(
-            Question,
-            slug=self.kwargs["question"],
-            status="published",
-            pub_date__year=self.kwargs["year"],
-            pub_date__month=self.kwargs["month"],
-            pub_date__day=self.kwargs["day"],
-        )
+        obj = super().get_object()
         if not obj.can_update(self.request.user):
             logger.warning('Possible attack: \nuser: %s\nobj: %s', self.request.user, obj)
             raise Http404
@@ -78,14 +61,7 @@ class QuestionDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     success_message = 'Question deleted successfully!'
 
     def get_object(self, queryset=None):
-        obj = get_object_or_404(
-            Question,
-            slug=self.kwargs["question"],
-            status="published",
-            pub_date__year=self.kwargs["year"],
-            pub_date__month=self.kwargs["month"],
-            pub_date__day=self.kwargs["day"],
-        )
+        obj = super().get_object()
         if not obj.can_delete(self.request.user):
             logger.warning('Possible attack: \nuser: %s\nobj: %s', self.request.user, obj)
             raise Http404
