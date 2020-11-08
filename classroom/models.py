@@ -28,6 +28,9 @@ class Classroom(models.Model):
 
     tags = TaggableManager(through=UUIDTaggedItem)
 
+    class Meta:
+        ordering = ('-created_at', )
+
     def __str__(self):
         return self.name
 
