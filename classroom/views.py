@@ -21,12 +21,15 @@ class ClassroomListView(LoginRequiredMixin, ListView):
     model = Classroom
     context_object_name = 'classroom_list'
     template_name = 'classroom/classroom_list.html'
+    paginate_by = 12
 
     def get_queryset(self):
-        if self.request.user.is_superuser:
-            return self.model.objects.all()
+        queryset = super().get_queryset()
 
-        return self.model.objects.filter(
+        if self.request.user.is_superuser:
+            return queryset
+
+        return queryset.filter(
             Q(students=self.request.user) | Q(created_by=self.request.user)
         ).distinct()
 
