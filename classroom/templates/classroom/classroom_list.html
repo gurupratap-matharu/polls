@@ -1,8 +1,14 @@
 {% extends '_base.html' %}
+{% load classroom_tags %}
 
 {% block title %}Classroom{% endblock title %}
 {% block appname %}Classroom{% endblock appname %}
+
 {% block content %}
+<div class="mb-3">
+    {% show_top_tags 15 %}
+</div>
+
 <div class="mb-3">
     <button type="submit" class="btn btn-light"><i class="fa fa-sticky-note-o fa-lg p-2" aria-hidden="true"></i>
         <p class="text-primary d-inline">
