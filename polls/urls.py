@@ -7,10 +7,10 @@ from polls.views import (QuestionCreate, QuestionDelete, QuestionDetailView,
 app_name = 'polls'
 urlpatterns = [
     path('', QuestionListView.as_view(), name='question_list'),
-    path('<int:uuid>/', QuestionDetailView.as_view(), name='question_detail'),
+    path('<uuid:pk>/', QuestionDetailView.as_view(), name='question_detail'),
     path('create/', QuestionCreate.as_view(), name='question_create'),
-    path('<int:uuid>/update/', QuestionUpdate.as_view(), name='question_update'),
-    path('<int:uuid>/delete/', QuestionDelete.as_view(), name='question_delete'),
-    path('<int:uuid>/results/', ResultsView.as_view(), name='results'),
-    path('<int:uuid>/vote/', VoteView.as_view(), name='vote'),
+    path('<uuid:pk>/update/', QuestionUpdate.as_view(), name='question_update'),
+    path('<uuid:pk>/delete/', QuestionDelete.as_view(), name='question_delete'),
+    path('<uuid:pk>/results/', ResultsView.as_view(), name='results'),
+    path('<uuid:pk>/vote/', VoteView.as_view(), name='vote'),
 ]
