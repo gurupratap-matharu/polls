@@ -1,0 +1,10 @@
+<ul class="nav nav-pills">
+    <li class="nav-item m-2">
+        <a class="nav-link active" href="{% url 'classroom_list' %}">All</a>
+    </li>
+    {% for tag in top_tags %}
+    <li class="nav-item m-2">
+        <a class="nav-link btn btn-light" href="{% url 'classroom_list_by_tag' tag.slug %}">{{ tag }}</a>
+    </li>
+    {% endfor %}
+</ul>
