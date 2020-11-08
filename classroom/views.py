@@ -47,15 +47,15 @@ class ClassroomDetailView(LoginRequiredMixin, FormMixin, DetailView):
     def get_success_url(self):
         return self.get_object().get_absolute_url()
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request):
         if not request.user.is_authenticated:
             return HttpResponseForbidden()
 
         form = self.get_form()
         if form.is_valid():
             return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
+
+        return self.form_invalid(form)
 
     def form_valid(self, form):
         form.instance.classroom = self.get_object()
