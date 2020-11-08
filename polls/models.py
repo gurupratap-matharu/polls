@@ -48,16 +48,16 @@ class Question(models.Model):
         return self.question_text
 
     def get_absolute_url(self):
-        return reverse('polls:question_detail', args=[self.pub_date.year, self.pub_date.month, self.pub_date.day, self.slug])
+        return reverse('polls:question_detail', args=[self.id])
 
     def was_published_recently(self):
         return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
 
     def get_update_url(self):
-        return reverse('polls:question_update', args=[self.pub_date.year, self.pub_date.month, self.pub_date.day, self.slug])
+        return reverse('polls:question_update', args=[self.id])
 
     def get_delete_url(self):
-        return reverse('polls:question_delete', args=[self.pub_date.year, self.pub_date.month, self.pub_date.day, self.slug])
+        return reverse('polls:question_delete', args=[self.id])
 
     def can_update(self, user):
         return user.is_superuser or self.created_by == user
