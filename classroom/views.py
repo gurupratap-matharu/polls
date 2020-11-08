@@ -10,6 +10,7 @@ from django.urls import reverse_lazy
 from django.views.generic import DetailView, FormView, ListView
 from django.views.generic.edit import (CreateView, DeleteView, FormMixin,
                                        UpdateView)
+from taggit.models import Tag
 
 from classroom.forms import EnrollmentForm, PostForm
 from classroom.models import Classroom, Enrollment
@@ -22,9 +23,16 @@ class ClassroomListView(LoginRequiredMixin, ListView):
     context_object_name = 'classroom_list'
     template_name = 'classroom/classroom_list.html'
     paginate_by = 12
+    tag = None
 
     def get_queryset(self):
         queryset = super().get_queryset()
+        tag_slug = self.kwargs.get('tag_slug')
+
+        if tag_slug:
+            logger.info("tag_slug: %s", tag_slug)
+            self.tag = get_object_or_404(Tag, slug=tag_slug)
+            queryset = queryset.filter(tags__in=[self.tag])
 
         if self.request.user.is_superuser:
             return queryset
@@ -32,6 +40,11 @@ class ClassroomListView(LoginRequiredMixin, ListView):
         return queryset.filter(
             Q(students=self.request.user) | Q(created_by=self.request.user)
         ).distinct()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tag'] = self.tag
+        return context
 
 
 class ClassroomPeopleView(LoginRequiredMixin, DetailView):
