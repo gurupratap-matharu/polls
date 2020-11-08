@@ -5,7 +5,7 @@
 
 {% block appname %}
 <a href="{{ classroom.get_absolute_url }}" class="navbar-brand my-0 font-weight-normal">
-    {{ classroom.name|title }}
+    {{ classroom.name|title|truncatechars:20 }}
 </a>
 {% endblock appname %}
 
