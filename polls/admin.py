@@ -8,12 +8,14 @@ class ChoiceInline(admin.TabularInline):
 
 
 class QuestionAdmin(admin.ModelAdmin):
+    model = Question
     inlines = (ChoiceInline,)
     list_display = ('question_text', 'pub_date', 'created_by')
     list_filter = ('pub_date',)
     search_fields = ('question_text',)
-    model = Question
-    readonly_fields = ('created_by',)
+    raw_id_fields = ('created_by',)
+    date_hierarchy = 'pub_date'
+    ordering = ('pub_date', 'created_by',)
 
 
 admin.site.register(Question, QuestionAdmin)
