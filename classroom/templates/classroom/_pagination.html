@@ -15,14 +15,12 @@
             </a>
         </li>
         {% endif %}
-        {% if page.has_other_pages %}
         <li class="page-item active">
             <span class="page-link">
                 {{ page_obj.number }}
                 <span class="sr-only">(current)</span>
             </span>
         </li>
-        {% endif %}
         {% if page_obj.has_next %}
         <li class="page-item">
             <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">

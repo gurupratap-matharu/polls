@@ -22,6 +22,13 @@ def show_popular_classrooms(count=5):
     return {'popular_classrooms': popular_classrooms}
 
 
+@register.inclusion_tag('classroom/recommended_classrooms.html')
+def show_recommended_classrooms(count=5):
+    recommended_classrooms = Classroom.objects.annotate(
+        posts_count=Count('posts')).order_by('-posts_count')[:count]
+    return {'recommended_classrooms': recommended_classrooms}
+
+
 @register.inclusion_tag('classroom/top_tags.html')
 def show_top_tags(count=10):
     top_tags = Classroom.tags.most_common()[:count]
