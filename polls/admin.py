@@ -10,8 +10,9 @@ class ChoiceInline(admin.TabularInline):
 class QuestionAdmin(admin.ModelAdmin):
     model = Question
     inlines = (ChoiceInline,)
-    list_display = ('question_text', 'pub_date', 'created_by')
+    list_display = ('question_text', 'slug', 'pub_date', 'created_by')
     list_filter = ('pub_date',)
+    prepopulated_fields = {"slug": ("question_text",)}
     search_fields = ('question_text',)
     raw_id_fields = ('created_by',)
     date_hierarchy = 'pub_date'
