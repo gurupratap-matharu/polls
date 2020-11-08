@@ -2,7 +2,9 @@
 {% load classroom_tags %}
 
 {% block title %}Classroom{% endblock title %}
-{% block appname %}Classroom{% endblock appname %}
+{% block appname %}
+<a href="{% url 'classroom_list' %}" class="navbar-brand my-0 font-weight-normal">Classroom</a>
+{% endblock appname %}
 
 {% block content %}
 
