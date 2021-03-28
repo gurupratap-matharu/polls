@@ -5,7 +5,7 @@ services:
         build: .
         command: gunicorn main.wsgi -b 0.0.0.0:8000 --log-level DEBUG
         env_file:
-            - main/.env
+            - .env
         volumes:
             - .:/code
         ports:
@@ -14,7 +14,7 @@ services:
             - db
 
     db:
-        image: postgres:11
+        image: postgres:13.2-alpine
         environment:
             POSTGRES_PASSWORD: postgres
         volumes:
