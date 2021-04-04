@@ -3,6 +3,7 @@ version: '3.7'
 services:
     web:
         build: .
+        container_name: django
         command: gunicorn main.wsgi -b 0.0.0.0:8000 --log-level DEBUG
         env_file:
             - .env
@@ -12,13 +13,36 @@ services:
             - 8000:8000
         depends_on:
             - db
+        networks:
+            - main
 
     db:
         image: postgres:13.2-alpine
+        container_name: postgres
         environment:
             POSTGRES_PASSWORD: postgres
         volumes:
             - postgres_data:/var/lib/postgresql/data/
+        networks:
+            - main
+        
+    nginx:
+        container_name: nginx
+        build:
+            context: ./nginx
+            dockerfile: dev/Dockerfile
+        ports:
+            - "80:80"
+        volumes:
+            - ./nginx/dev/dev.conf:/etc/nginx/nginx.conf:ro
+            - ./staticfiles:/usr/src/app/assets
+        depends_on:
+            - web
+        networks:
+            - main
+networks:
+    main:
+        driver: bridge
 volumes:
     postgres_data:
 
